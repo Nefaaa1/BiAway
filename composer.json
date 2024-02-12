@@ -2,7 +2,7 @@
     "name": "antoi/projet",
     "autoload": {
         "psr-4": {
-            "Antoi\\Projet\\": "app/"
+            "App\\": "app/"
         }
     },
     "require": {}
