@@ -5,7 +5,9 @@ namespace App\Models;
 class Router {
     private $routes = array(
         '/' => 'HomeController@index',
-        '/loginpage' => 'LoginController@index'
+        '/loginpage' => 'LoginController@index',
+        '/inscription' => 'LoginController@inscription',
+        '/connexion' => 'LoginController@connexion'
     );
 
     public function route() {
