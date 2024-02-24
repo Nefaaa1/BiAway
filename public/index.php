@@ -1,7 +1,7 @@
 <?php
 
 require_once '../vendor/autoload.php';
-
+require_once 'assets/functions.php';
 use App\Models\Router;
 
 

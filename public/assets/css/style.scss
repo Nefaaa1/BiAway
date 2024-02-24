@@ -1,0 +1,152 @@
+@import "_variables.scss";
+@import "_font.scss";
+@import "_mixin.scss";
+
+html{
+    font-size: 62.5%;
+}
+
+body{
+    font-size: 1.6rem;
+    margin: 0;
+    padding: 0;
+    font-family: 'Figtree';
+}
+
+a{
+    text-decoration: none;
+}
+fieldset{
+    border: none;
+}
+
+header{
+    padding-top: 3rem;
+    nav{
+        background-color: $primary-color;
+        border-radius: $border-radius;
+        width: 75%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 3rem;
+        padding: .5rem 1rem;
+        margin: 0 auto;
+        a{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            img{
+                margin-top: 0.4rem;
+                width: 75%;
+                height: auto;
+            }
+        }
+        i{
+            color:#fff;
+            cursor: pointer;
+        }   
+    }
+    .menu-list{
+        display: block;
+        width: 100%;
+        position: absolute;
+        top: -20.2rem;
+        left: 0;
+        max-height: 20rem; 
+        background: #f55f39b7;
+        border-bottom: $primary-color 0.2rem solid;
+        transition: all 1s ease-in-out;
+        ul{
+            li {
+                list-style-type: none;
+                margin-bottom: 1rem;
+                a{
+                    color:#fff;
+                    font-weight: bold;
+                }
+            }
+            li:first-child{
+                border-bottom: #fff 1px solid;
+                margin-bottom: 1.5rem;
+            }
+        }
+        
+
+    }
+    .show-menu {
+        top: 0;
+    }
+
+    
+}
+
+header.home-header{
+    height: 40rem;
+    background-image: url('../../assets/img/header.jpg');
+    background-size: cover;
+    background-position: 80%;
+}
+
+footer{
+    background-color: $secondary-color;
+    background-image: url('../../assets/img/footer.png');
+    background-repeat: no-repeat;
+    background-position: 1.5rem 0;
+    color: #fff;
+    padding: 10rem 3rem 3rem;
+    h3{
+        font-size: 2.5rem;
+    }
+    nav{
+        a{
+            color: #fff;
+            font-size: 1.2rem;
+        }
+
+        a+a{
+            margin-left: 1.2rem;
+        }
+    }
+    form{
+        input{
+            width: 43%;
+            border-radius: $border-radius;
+            padding: 1rem;
+            border: none;
+            margin-bottom: 1rem;
+            background-color: transparent;
+            @include glassmorphism;
+        }
+        input::placeholder{
+            color:#fff
+        }
+        textarea{
+            width: 100%;
+            border-radius: $border-radius;
+            padding: 1rem;
+            border: none;
+            background-color: transparent;
+            resize: none;
+            margin-bottom: 1rem;
+            @include glassmorphism;
+        }
+        textarea::placeholder{
+            color:#fff
+        }
+        fieldset{
+            padding:0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        button{
+            background-color: $primary-color;
+            color: #fff;
+            border-radius: $border-radius ;
+            padding: 1rem 4rem;
+            border: none;
+            margin-left: auto;
+        }
+    }
+}

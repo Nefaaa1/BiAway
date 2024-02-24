@@ -6,7 +6,7 @@ use App\Models\Database;
 
 class LoginController {
     public function index() {
-        require_once __DIR__ . '/../Views/loginpage.html';
+        require_once __DIR__ . '/../Views/loginpage.php';
     }
 
     public function inscription(){
@@ -30,6 +30,8 @@ class LoginController {
         }
         $u->get($verif_id['id']);
         if(password_verify($_POST['password'],$u->password)){
+            unset($u->password);
+            $_SESSION['user']=$u;
             echo json_encode(['status' => 'success', 'message' => 'Connexion réussie !', 'userId' => $u->id]);
         }else{
             echo json_encode(['status' => 'error', 'message' => 'Adresse e-mail ou mot de passe incorrect !']);

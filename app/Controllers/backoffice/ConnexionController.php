@@ -5,7 +5,7 @@ use App\Models\Database;
 
 class LoginController {
     public function index() {
-        require_once __DIR__ . '/../Views/loginpage.html';
+        require_once __DIR__ . '/../Views/backoffice/connexion.php';
     }
 
     public function inscription(){
