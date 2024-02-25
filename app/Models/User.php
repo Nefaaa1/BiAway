@@ -54,7 +54,7 @@ class User extends Database {
     }
 
     public function get($id){
-        if ($id != "") {
+        if ($id != 0) {
             try{
                 $sql ='SELECT * FROM users WHERE id=?';
                 $stmt = $this->pdo->prepare($sql);
@@ -82,19 +82,21 @@ class User extends Database {
     }
 
     public function save(){
-        if($this->id == ""){
+        if($this->id == 0){
             $this->_insert();
         } else {
             $req= array();
             foreach(array_keys(get_object_vars($this)) as $k){
-                if ($k != "id")
+                if ($k != "pdo" && $k != "id")
                     $req[]= $k.'= :'.$k;
             }
-            $sql ='UPDATE users SET '. implode(" ", $req) .' WHERE id=:id';
+            $sql ='UPDATE users SET '. implode(", ", $req) .' WHERE id=:id';
+            
             try{
                 $stmt = $this->pdo->prepare($sql);
                 foreach(array_keys(get_object_vars($this)) as $k){
-                    $stmt->bindValue(':' . $k, $this->$k);
+                    if ($k != "pdo")
+                     $stmt->bindValue(':'. $k, $this->$k);
                 }
                 $stmt->execute();
             }catch(PDOException $e){
@@ -128,9 +130,9 @@ class User extends Database {
         }
     }
 
-    private function verif_mail($mail){
+    public function verif_mail($mail){
         
-        $sql ='SELECT * FROM users WHERE mail=:mail';
+        $sql ='SELECT id FROM users WHERE mail=:mail';
         try{
             $stmt = $this->pdo->prepare($sql);
             $stmt->bindValue(':' .'mail', $mail);
@@ -140,7 +142,7 @@ class User extends Database {
             echo "Erreur lors de l'ajout de l'utilisateur : " . $e->getMessage();
             echo $sql;
         }
-        if (count($data)>0)
+        if (count($data) == 0)
             return false;
         else    
             return true;

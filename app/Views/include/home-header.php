@@ -17,25 +17,19 @@
     <div class="menu-list">
         <ul>
             <li><a href="/"><img src="assets/img/BiAway_Logo.png" alt="Logo BiAway"></a></li>
+            <?php if(!isset($_SESSION['user'])){ ?>
             <li><a href="/loginpage">Connexion / Inscription</a></li>
+            <?php }else{ ?>
+            <li><a href="#">Mon compte</a></li>
+            <?php } ?>
             <li><a href="#">Contact</a>  </li>
             <li><a href="#">À Propos</a> </li>
+            <?php if(isset($_SESSION['user'])){ ?>
+            <li><a href="/deconnexion">Déconnexion</a></li>
+            <?php } ?>
         </ul>
     </div>
 </header>
 
 
-<script>
-    var menuIcon = document.querySelector('.menu-burger');
-    var menuList = document.querySelector('.menu-list');
-
-    menuIcon.addEventListener('click', function () {
-        menuList.classList.add('show-menu');
-    });
-
-    document.addEventListener('click', function (e) {
-        if(!menuList.contains(e.target) && !menuIcon.contains(e.target) && menuList.classList.contains('show-menu')){
-            menuList.classList.remove('show-menu');
-        }
-    });
-</script>
+<script src="./assets/js/menu-burger.js"></script>

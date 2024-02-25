@@ -7,7 +7,8 @@ class Router {
         '/' => 'HomeController@index',
         '/loginpage' => 'LoginController@index',
         '/inscription' => 'LoginController@inscription',
-        '/connexion' => 'LoginController@connexion'
+        '/connexion' => 'LoginController@connexion',
+        '/deconnexion' => 'LoginController@deconnexion'
     );
 
     public function route() {

@@ -21,11 +21,16 @@ fieldset {
   border: none;
 }
 
+main section {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
 header {
   padding-top: 3rem;
 }
 header nav {
-  background-color: #FF6039;
+  background-color: #ff6039;
   border-radius: 1rem;
   width: 75%;
   display: flex;
@@ -57,7 +62,11 @@ header .menu-list {
   left: 0;
   max-height: 20rem;
   background: rgba(245, 95, 57, 0.7176470588);
-  border-bottom: #FF6039 0.2rem solid;
+  border-bottom: #ff6039 0.2rem solid;
+  background: rgba(255, 96, 57, 0.6);
+  -webkit-backdrop-filter: blur(10px);
+          backdrop-filter: blur(10px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: all 1s ease-in-out;
 }
 header .menu-list ul li {
@@ -108,6 +117,7 @@ footer form input {
   border: none;
   margin-bottom: 1rem;
   background-color: transparent;
+  color: #fff;
   background: rgba(255, 255, 255, 0.1);
   -webkit-backdrop-filter: blur(10px);
           backdrop-filter: blur(10px);
@@ -115,9 +125,11 @@ footer form input {
 }
 footer form input::-moz-placeholder {
   color: #fff;
+  opacity: 0.7;
 }
 footer form input::placeholder {
   color: #fff;
+  opacity: 0.7;
 }
 footer form textarea {
   width: 100%;
@@ -127,6 +139,7 @@ footer form textarea {
   background-color: transparent;
   resize: none;
   margin-bottom: 1rem;
+  color: #fff;
   background: rgba(255, 255, 255, 0.1);
   -webkit-backdrop-filter: blur(10px);
           backdrop-filter: blur(10px);
@@ -134,9 +147,11 @@ footer form textarea {
 }
 footer form textarea::-moz-placeholder {
   color: #fff;
+  opacity: 0.7;
 }
 footer form textarea::placeholder {
   color: #fff;
+  opacity: 0.7;
 }
 footer form fieldset {
   padding: 0;
@@ -145,10 +160,34 @@ footer form fieldset {
   justify-content: space-between;
 }
 footer form button {
-  background-color: #FF6039;
+  background-color: #ff6039;
   color: #fff;
   border-radius: 1rem;
   padding: 1rem 4rem;
   border: none;
   margin-left: auto;
+}
+
+#form_inscription {
+  display: none;
+}
+
+#form_inscription.show {
+  display: block;
+}
+
+#form_connexion {
+  display: none;
+}
+
+#form_connexion.show {
+  display: block;
+}
+
+#form_inscription .toggleForm, #form_connexion .toggleForm {
+  color: #ff6039;
+  cursor: pointer;
+}
+#form_inscription .toggleForm:hover, #form_connexion .toggleForm:hover {
+  color: #560000;
 }/*# sourceMappingURL=style.css.map */
