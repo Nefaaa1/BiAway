@@ -4,21 +4,18 @@ namespace App\Models;
 use PDO;
 use PDOException;
 
-class User extends Database {
+class Lodgement extends Database {
 
     private $pdo;
     public $id ="";
-    public $actif ="1";
-    public $id_role ="2";
-    public $firstname ="";
-    public $lastname ="";
-    public $mail ="";
-    public $age ="";
-    public $password ="";
-    public $picture ="";
+    public $id_user ="";
+    public $title ="";
     public $creation ="";
     public $modification ="";
-    public $last_connexion ="";
+    public $actif ="1";
+    public $peoples ="";
+    public $city ="";
+    public $price ="";
     
 
     public function __construct() {
@@ -29,17 +26,14 @@ class User extends Database {
         if (property_exists($this, $k)) {
             switch($k){
                 case 'id' :  $this->$k = intval($v); break;
-                case 'id_role' :  $this->$k = ($v == "" ? 2 : intval($v)); break;
-                case 'firstname' :  $this->$k = ucfirst($v); break;
-                case 'lastname' : $this->$k = strtoupper($v); break;
-                case 'mail' : $this->$k = strtolower($v); break;
-                case 'password' : $this->$k = $v; break;
-                case 'age' : $this->$k = ($v == "" ? NULL : $v); break;
-                case 'picture' : $this->$k = ($v == "" ? NULL : $v); break;
+                case 'id_user' :  $this->$k =intval($v); break;
+                case 'title' :  $this->$k = ucfirst($v); break;
+                case 'actif' : $this->$k = ($v == "" ? 0 : $v); break;
+                case 'peoples' : $this->$k = ($v == "" ? 0 : $v); break;
+                case 'city' : $this->$k = ($v == "" ? NULL : $v); break;
+                case 'price' : $this->$k = ($v == "" ? 0.00 : $v); break;
                 case 'creation' : $this->$k = ($v == "" ? NULL : $v); break;
                 case 'modification' : $this->$k = ($v == "" ? NULL : $v); break;
-                case 'last_connexion' : $this->$k = ($v == "" ? NULL : $v); break;
-                case 'actif' : $this->$k = ($v == "" ? 0 : $v); break;
                 default : $this->$k = $v;
             }
         }else{
@@ -58,13 +52,13 @@ class User extends Database {
     public function get($id){
         if ($id != 0) {
             try{
-                $sql ='SELECT * FROM users WHERE id=?';
+                $sql ='SELECT * FROM lodgements WHERE id=?';
                 $stmt = $this->pdo->prepare($sql);
                 $stmt->bindParam(1, $id, PDO::PARAM_INT);
                 $stmt->execute();
                 $this->setData($stmt->fetch(PDO::FETCH_ASSOC));
             }catch(PDOException $e){
-                echo "Erreur lors de la recupération de l'user ".$id." : " . $e->getMessage();
+                echo "Erreur lors de la recupération du logement ".$id." : " . $e->getMessage();
             }
         }else{
             return 'L\'id est incorrect !';
@@ -73,27 +67,15 @@ class User extends Database {
 
     public function getBy($k, $v){
             try{
-                $sql ="SELECT id FROM users WHERE $k=?";
+                $sql ="SELECT id FROM lodgements WHERE $k=?";
                 $stmt = $this->pdo->prepare($sql);
                 $stmt->bindParam(1, $v, PDO::PARAM_STR);
                 $stmt->execute();
                 return $stmt->fetch(PDO::FETCH_ASSOC);
             }catch(PDOException $e){
-                echo "Aucun utilisateur trouvé :" . $e->getMessage();
+                echo "Aucun logement trouvé :" . $e->getMessage();
             }
     }
-
-    public function getByAdmin($k, $v){
-        try{
-            $sql ="SELECT id FROM users WHERE id_role=1 AND $k=?";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->bindParam(1, $v, PDO::PARAM_STR);
-            $stmt->execute();
-            return $stmt->fetch(PDO::FETCH_ASSOC);
-        }catch(PDOException $e){
-            echo "Aucun utilisateur trouvé :" . $e->getMessage();
-        }
-}
 
     public function save(){
         if($this->id == 0){
@@ -105,7 +87,7 @@ class User extends Database {
                 if ($k != "pdo" && $k != "id")
                     $req[]= $k.'= :'.$k;
             }
-            $sql ='UPDATE users SET '. implode(", ", $req) .' WHERE id=:id';
+            $sql ='UPDATE lodgements SET '. implode(", ", $req) .' WHERE id=:id';
             
             try{
                 $stmt = $this->pdo->prepare($sql);
@@ -115,7 +97,7 @@ class User extends Database {
                 }
                 $stmt->execute();
             }catch(PDOException $e){
-                echo "Erreur lors de la mise à jour de l'utilisateur : " . $e->getMessage();
+                echo "Erreur lors de la mise à jour du logement : " . $e->getMessage();
             }
         }
     }
@@ -131,7 +113,7 @@ class User extends Database {
                 $val[]=':'.$k;
             }       
         }
-        $sql ='INSERT INTO users ( '. implode(",", $req) .' ) VALUES ( '. implode(",", $val) .' )';
+        $sql ='INSERT INTO lodgements ( '. implode(",", $req) .' ) VALUES ( '. implode(",", $val) .' )';
         try{
             $stmt = $this->pdo->prepare($sql);
             foreach(array_keys(get_object_vars($this)) as $k){
@@ -140,32 +122,9 @@ class User extends Database {
             }
             $stmt->execute();
         }catch(PDOException $e){
-            echo "Erreur lors de l'ajout de l'utilisateur : " . $e->getMessage();
+            echo "Erreur lors de l'ajout du logement : " . $e->getMessage();
             echo $sql;
         }
-    }
-
-    public function delete(){
-        $this->actif = 0;
-        $this->save();
-    }
-
-    public function verif_mail($mail){
-        
-        $sql ='SELECT id FROM users WHERE mail=:mail AND id !="'. $this->id.'"';
-        try{
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->bindValue(':' .'mail', $mail);
-            $stmt->execute();
-            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        }catch(PDOException $e){
-            echo "Erreur lors de l'ajout de l'utilisateur : " . $e->getMessage();
-            echo $sql;
-        }
-        if (count($data) == 0)
-            return false;
-        else    
-            return true;
     }
 
     public function setData($data = array()){
@@ -189,24 +148,24 @@ class User extends Database {
         return $data;
     }
 
-    public static function getAllUsers($pdo, $req = array()){
+    public static function getAllLodgements($pdo, $req = array()){
         $where = array();
         $val = array();
 
         //id_role
-        if(isset($req['id_role']) && $req['id_role'] !=''){
-            $where[]= 'AND users.id_role=?';
-            $val[]=$req['id_role'];
+        if(isset($req['peoples']) && $req['peoples'] !=''){
+            $where[]= 'AND lodgements.peoples=?';
+            $val[]=$req['peoples'];
         }
 
          //recherche
          if(isset($req['recherche']) && $req['recherche'] !=''){
-            $where[]= 'AND (users.firstname LIKE "%'.$req["recherche"].'%" OR users.lastname LIKE "%'.$req["recherche"].'%" OR users.mail LIKE "%'.$req["recherche"].'%")';
+            $where[]= 'AND (lodgements.title LIKE "%'.$req["recherche"].'%" OR users.city LIKE "%'.$req["recherche"].'%" )';
         }
 
-        $sql ='SELECT users.*, roles.name AS role_name
-                FROM users
-                INNER JOIN roles ON users.id_role = roles.id
+        $sql ='SELECT lodgements.*, users.lastname,users.firstname
+                FROM lodgements
+                INNER JOIN users ON lodgements.id_user = users.id
                 WHERE 1
                 '. implode(' ',  $where);
 
@@ -215,7 +174,7 @@ class User extends Database {
             $query->execute($val);
             return $query->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            echo "Erreur lors de la récupération des utilisateurs : " . $e->getMessage();
+            echo "Erreur lors de la récupération des logements : " . $e->getMessage();
             return [];
         }
     }

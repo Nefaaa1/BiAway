@@ -9,3 +9,11 @@
     backdrop-filter: blur(10px);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
 }
+
+@mixin input {
+  border-radius: $border-radius;
+  padding: 1rem;
+  border: none;
+  background-color: transparent;
+
+}

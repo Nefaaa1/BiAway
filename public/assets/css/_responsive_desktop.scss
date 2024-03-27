@@ -1,0 +1,84 @@
+@media only screen and (min-width: 1024px) {
+    .header{
+        max-width: 130rem;
+        margin: 0 auto;
+        nav{ 
+            .menu-burger{
+                display: none;
+            }
+            a.menu-desktop{
+                display: flex;
+                color:#fff;
+                font-weight: bold;
+            }
+            a:first-child{
+                width: 50%;
+                justify-content: flex-start;
+            }
+        }
+    }
+    .footer{
+        max-width: 110rem;
+        margin: 0 auto;
+        flex-direction: row;
+        justify-content: space-around;
+        background-position: 40% 0;
+        section{
+            width: 40%;
+            &.contact_site h3{
+                margin-top: 0;
+            }
+            &.lien_rapide nav{
+                flex-direction: column;
+                a{
+                    margin: 2rem 0;
+                }
+            }
+        }
+
+    }
+    .container{
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 110rem;
+        #form_inscription, #form_connexion{
+            max-width: 33%;
+            margin: 10rem auto;
+        }
+    }
+
+    .backoffice_connexion {
+        width: 35rem;
+    }
+
+    .content_back{
+        
+        table{
+            width: 80%;
+            margin: 4rem auto;
+            thead{
+                display: table-header-group;
+            }
+            td::before{
+                content:"";
+            }
+            tr{
+                display: table-row;
+               
+            }
+            td{
+                display: table-cell;
+                text-align: center;
+                padding: 10px;
+            }
+        }
+
+        #form_search{
+            justify-content: flex-start;
+            input, select{
+                width: 20%;
+                margin-right: 3rem;
+            }
+        }
+    }
+}

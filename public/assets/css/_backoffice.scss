@@ -1,0 +1,123 @@
+
+.back_container{
+    height: 100%;
+    position: fixed;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-image: url('../../assets/img/header.jpg');
+    background-size: cover;
+    background-position: 80%;
+}
+.backoffice_connexion{
+    padding: 1rem;
+    border-radius: $border-radius;
+    background-color: $primary-color;
+    box-shadow: 6px 5px 13px -4px rgba(255,96,57,0.58);
+    width: 60%;
+    a{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+    }
+    p{
+        font-size:1.3rem;
+        color: #fff;
+        text-align: center;
+    }
+    input::placeholder{
+        color:#fff;
+        opacity: 0.9;
+    }
+    input{
+        @include input;
+        color: #fff;
+        width: 100%;
+        @include glassmorphism;
+    }
+    button{
+        background-color: $secondary-color;
+        margin: 1.2rem;
+    }
+}
+
+.content_back{
+
+    padding: 2rem 1rem ;
+
+    table{
+        border-collapse: collapse;
+        width: 100%;
+        thead{
+            display: none;
+        }
+        tr{
+            display: block;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            transition: all 0.4s ease-in-out;
+        }
+        td{
+            display: block;
+            text-align: right;
+        }
+        td::before{
+            content:attr(data-nom);
+            float: left;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #FAFAFF; 
+        }
+        .disabled_tr{
+            opacity: 0.4;
+        }
+    }
+
+}
+
+.back_header{
+    background-color: $secondary-color;
+    padding: 1rem 0;
+
+    a{
+       color: #fff; 
+    }
+    a:hover{
+        color: $primary-color;
+    }
+    nav{
+        display: flex;
+        justify-content: space-around;
+    }
+}
+
+#form_search{
+    // background-color: #FAFAFF;
+    padding: 1rem 0.5rem;
+    border-radius: $border-radius;
+    display: flex;
+    justify-content: space-around;
+    input, select{
+        width: 45%;
+        padding: 1rem 2rem;
+        border:none;
+        box-shadow: 6px 5px 13px -4px #5a5a5acb;
+        &:focus-visible {
+            outline:none;
+        }
+    }
+    button{
+        padding: 1rem 2rem;
+    }
+}
+
+#liste_resultat{
+    cursor: pointer;
+    tr:hover{
+        background-color: #d0d0db;
+    }
+}

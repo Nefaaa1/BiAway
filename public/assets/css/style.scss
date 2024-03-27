@@ -1,11 +1,16 @@
 @import "_variables.scss";
 @import "_font.scss";
 @import "_mixin.scss";
+@import "_backoffice.scss";
 
 // GENERAL
 
 html {
     font-size: 62.5%;
+}
+
+*{
+    box-sizing: border-box;
 }
 
 body{
@@ -29,10 +34,36 @@ main{
     }
 }
 
+// input, textarea{
+//     @include input;
+// }
+
+input.error{
+    border-bottom: red 2px solid;
+}
+
+button, .button{
+    background-color: $primary-color;
+    transition: all 0.4s ease-in-out;
+    color: #fff;
+    border-radius: $border-radius ;
+    padding: 1rem 4rem;
+    border: none;
+    margin-left: auto;
+    &:hover{
+        background-color: $primary-color-hover;
+    }
+}
+
+button:hover{
+    cursor: pointer;
+}
+
 // HEADER
 
-header{
+.header{
     padding-top: 3rem;
+    border-radius: 0 0 $border-radius $border-radius ;
     nav{
         background-color: $primary-color;
         border-radius: $border-radius;
@@ -41,7 +72,7 @@ header{
         justify-content: space-between;
         align-items: center;
         height: 3rem;
-        padding: .5rem 1rem;
+        padding: 2rem 3rem;
         margin: 0 auto;
         a{
             display: flex;
@@ -49,8 +80,11 @@ header{
             align-items: center;
             img{
                 margin-top: 0.4rem;
-                width: 75%;
+                width: 7rem;
                 height: auto;
+            }
+            &.menu-desktop{
+                display: none;
             }
         }
         i{
@@ -59,12 +93,13 @@ header{
         }   
     }
     .menu-list{
+        z-index: 2;
         display: block;
         width: 100%;
         position: absolute;
-        top: -20.2rem;
+        top: -25rem;
         left: 0;
-        max-height: 20rem; 
+        height: auto;
         background: #f55f39b7;
         border-bottom: $primary-color 0.2rem solid;
         @include glassmorphism-menu;
@@ -102,17 +137,22 @@ header.home-header{
 
 // FOOTER
 
-footer{
+.footer{
+    border-radius: $border-radius $border-radius 0 0;
     background-color: $secondary-color;
     background-image: url('../../assets/img/footer.png');
     background-repeat: no-repeat;
     background-position: 1.5rem 0;
     color: #fff;
     padding: 10rem 3rem 3rem;
+    display: flex;
+    flex-direction: column;
     h3{
         font-size: 2.5rem;
     }
     nav{
+        display: flex;
+        flex-direction: row;
         a{
             color: #fff;
             font-size: 1.2rem;
@@ -124,10 +164,8 @@ footer{
     }
     form{
         input{
-            width: 43%;
-            border-radius: $border-radius;
-            padding: 1rem;
-            border: none;
+            @include input;
+            width: 47%;
             margin-bottom: 1rem;
             background-color: transparent;
             color:#fff;
@@ -138,11 +176,8 @@ footer{
             opacity: 0.7;
         }
         textarea{
+            @include input;
             width: 100%;
-            border-radius: $border-radius;
-            padding: 1rem;
-            border: none;
-            background-color: transparent;
             resize: none;
             margin-bottom: 1rem;
             color:#fff;
@@ -158,14 +193,7 @@ footer{
             flex-wrap: wrap;
             justify-content: space-between;
         }
-        button{
-            background-color: $primary-color;
-            color: #fff;
-            border-radius: $border-radius ;
-            padding: 1rem 4rem;
-            border: none;
-            margin-left: auto;
-        }
+        
     }
 }
 
@@ -173,6 +201,9 @@ footer{
 
 #form_inscription{
     display: none;
+    input{
+        @include input;
+    }
 }
 
 #form_inscription.show{
@@ -181,6 +212,9 @@ footer{
 
 #form_connexion{
     display: none;
+    input{
+        @include input;
+    }
 }
 
 #form_connexion.show{
@@ -188,6 +222,13 @@ footer{
 }
 
 #form_inscription, #form_connexion{
+    background-color: #F2F2F2;
+    border-radius: $border-radius;
+    padding: 1rem;
+    input{
+        width: 100%;
+        @include glassmorphism;
+    }
     .toggleForm{
         color: $primary-color;
         cursor: pointer;
@@ -195,4 +236,23 @@ footer{
     .toggleForm:hover{
         color: $secondary-color;
     }
+    fieldset>:not(:first-child){
+        margin-top: 1rem;
+    }
 }
+
+.container{
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 75%;
+}
+
+#message_inscription.success, #message_connexion.success{
+    color : #1db10a;
+}
+
+#message_inscription.error, #message_connexion.error{
+    color : #c40808;
+}
+
+@import "_responsive_desktop.scss";
