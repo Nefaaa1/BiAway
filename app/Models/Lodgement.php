@@ -16,6 +16,8 @@ class Lodgement extends Database {
     public $peoples ="";
     public $city ="";
     public $price ="";
+    public $picture ="";
+    public $description ="";
     
 
     public function __construct() {
@@ -34,6 +36,8 @@ class Lodgement extends Database {
                 case 'price' : $this->$k = ($v == "" ? 0.00 : $v); break;
                 case 'creation' : $this->$k = ($v == "" ? NULL : $v); break;
                 case 'modification' : $this->$k = ($v == "" ? NULL : $v); break;
+                case 'picture' : $this->$k = ($v == "" ? NULL : $v); break;    
+                case 'picture' : $this->$k = ($v == "" ? NULL : $v); break;                            
                 default : $this->$k = $v;
             }
         }else{
@@ -126,6 +130,11 @@ class Lodgement extends Database {
             echo $sql;
         }
     }
+    
+    public function delete(){
+        $this->actif = 0;
+        $this->save();
+    }
 
     public function setData($data = array()){
         foreach(array_keys(get_object_vars($this)) as $a){
@@ -152,21 +161,26 @@ class Lodgement extends Database {
         $where = array();
         $val = array();
 
-        //id_role
+        //id_user
+        if(isset($req['id_user']) && $req['id_user'] !=''){
+            $where[]= 'AND users.id=?';
+            $val[]=$req['id_user'];
+        } 
+        //peoples
         if(isset($req['peoples']) && $req['peoples'] !=''){
-            $where[]= 'AND lodgements.peoples=?';
-            $val[]=$req['peoples'];
-        }
+        $where[]= 'AND lodgements.peoples <= ?';
+        $val[]=$req['peoples'];
+        } 
 
          //recherche
          if(isset($req['recherche']) && $req['recherche'] !=''){
-            $where[]= 'AND (lodgements.title LIKE "%'.$req["recherche"].'%" OR users.city LIKE "%'.$req["recherche"].'%" )';
+            $where[]= 'AND (lodgements.title LIKE "%'.$req["recherche"].'%" OR lodgements.city LIKE "%'.$req["recherche"].'%" )';
         }
 
         $sql ='SELECT lodgements.*, users.lastname,users.firstname
                 FROM lodgements
                 INNER JOIN users ON lodgements.id_user = users.id
-                WHERE 1
+                WHERE 1 AND lodgements.actif=1
                 '. implode(' ',  $where);
 
         try {

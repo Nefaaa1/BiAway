@@ -1,5 +1,9 @@
 @media only screen and (min-width: 1024px) {
+    button.save span, .button.save span, button.delete span, .button.delete span, button.back span, .button.back span{
+        display: inline-block;
+     }
     .header{
+        border-radius: 0 0 $border-radius $border-radius ;
         max-width: 130rem;
         margin: 0 auto;
         nav{ 
@@ -41,6 +45,7 @@
         margin-left: auto;
         margin-right: auto;
         max-width: 110rem;
+        margin-top: 6rem;
         #form_inscription, #form_connexion{
             max-width: 33%;
             margin: 10rem auto;
@@ -81,4 +86,26 @@
             }
         }
     }
+    .search_lodgement{
+        width: 40%;
+        top: initial;
+        bottom: 0;
+        transform: translate(-50%, 50%);
+        button{
+            width: initial;
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translate(-50%, 55%);
+        }
+        form{
+            flex-direction: row;
+            justify-content: space-evenly;
+        }
+    }
+    .resultat_logement{
+        grid-template-columns: repeat(4, 1fr);
+    }
 }
+
+

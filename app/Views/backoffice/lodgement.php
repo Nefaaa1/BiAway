@@ -1,37 +1,45 @@
 <?php get_backheader(); ?>
 <main class="content_back">
     <form method="post" id="form_add">
-        <a class="button back" href="/backoffice/utilisateurs"><i class="fa-solid fa-square-caret-left"></i> <span>Retour</span></a>
+        <a class="button back" href="/backoffice/logements"><i class="fa-solid fa-square-caret-left"></i> <span>Retour</span></a>
         <button onclick="submitSave(event)" class="save"><i class="fa-regular fa-floppy-disk"></i> <span><?= $data['button'] ?></span></button>
-        <?php if($data['user']['id'] !=""){  ?>
+        <?php if($data['lodgement']['id'] !=""){  ?>
         <button onclick="_delete(event)" class="delete" ><i class="fa-regular fa-trash-can"></i> <span>Supprimer</span></button>
         <?php }  ?>
         <h2><?= $data['h2'] ?></h2>
-        <input type="hidden" name="id" value="<?= $data['user']['id'] ?>">       
+        <input type="hidden" name="id" value="<?= $data['lodgement']['id'] ?>">
         <fieldset>
-            <label for="id_role">Rôle</label>
-            <select name="id_role" id="id_role">
-                <?php foreach($data['roles'] as $d){?>
-                    <option value="<?= $d['id'] ?>" <?= $d['id'] == $data['user']['id_role'] ? "selected" : "" ;  ?> ><?= $d['name'] ?></option>
+            <label for="id_user">Propriétaire</label>
+            <select name="id_user" id="id_user">
+                <?php foreach($data['users'] as $d){?>
+                    <option value="<?= $d['id'] ?>" <?= $d['id'] == $data['lodgement']['id_user'] ? "selected" : "" ;  ?> ><?= $d['lastname'].' '. $d['firstname'] ?></option>
                 <?php }?>
             </select>
+        </fieldset>       
+        <fieldset>
+            <label for="title">Titre</label>
+            <input type="text" id="title" placeholder="Titre" name="title" value="<?= $data['lodgement']['title'] ?>">
         </fieldset>
         <fieldset>
-            <label for="name">Nom</label>
-            <input type="text" id="name" placeholder="Nom" name="lastname" value="<?= $data['user']['lastname'] ?>">
+            <label for="city">Ville</label>
+            <input type="text" id="city" placeholder="Ville" name="city" value="<?= $data['lodgement']['city'] ?>">
         </fieldset>
         <fieldset>
-            <label for="firstname">Prénom</label>
-            <input type="text" id="firstname" placeholder="Prénom" name="firstname" value="<?= $data['user']['firstname'] ?>">
+            <label for="price">Prix</label>
+            <input type="text" id="price" placeholder="0.00" name="price" value="<?= $data['lodgement']['price'] ?>">
         </fieldset>
         <fieldset>
-            <label for="mail">Mail</label>
-            <input type="email" id="mail" placeholder="Mail" name="mail" value="<?= $data['user']['mail'] ?>">
+            <label for="peoples">Nombre de personne</label>
+            <input type="number" id="peoples" placeholder="" name="peoples" value="<?= $data['lodgement']['peoples'] ?>">
         </fieldset>
         <fieldset>
-            <label for="mail">Téléphone</label>
-            <input type="tel" id="mail" placeholder="Mail" name="phone" value="<?= $data['user']['phone'] ?>">
-        </fieldset>        
+            <label for="photo">Choisissez une photo :</label>
+            <input type="file" id="picture" name="picture" accept="image/*">
+        </fieldset>
+        <fieldset>
+            <label for="description">Description</label>
+            <textarea name="description" id="description" cols="30" rows="10"><?= $data['lodgement']['description'] ?></textarea>
+        </fieldset>
     </form>
     <script>
     var input_add= document.querySelectorAll("#form_add input");
@@ -44,7 +52,7 @@
             input.classList.remove('error');
         });
         
-        fetch('/save_user', 
+        fetch('/save_lodgement', 
         {
             method: "POST",
             body : formData
@@ -57,7 +65,7 @@
                     input.classList.remove('error');
                 });
                 setTimeout( () => {
-                     window.location.href = '/backoffice/utilisateurs';
+                     window.location.href = '/backoffice/logements';
                     }, 500);
             }else {
                 for (const key in data.key) {
@@ -73,17 +81,19 @@
         });
     }
     function _delete(event){
-        if(confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')){
+        if(confirm('Êtes-vous sûr de vouloir supprimer ce logement ?')){
             event.preventDefault()
             var form = document.getElementById("form_add");
             var formData = new FormData(form);
-            fetch('/delete_user', 
+            fetch('/delete_lodgement', 
             {
                 method: "POST",
                 body : formData
             })
+            .then(response => response.json())
             .then(data => {
-                window.location.href = '/backoffice/utilisateurs';
+                console.log(data)
+                // window.location.href = '/backoffice/logements';
             })
             .catch(error => {
                 console.error("Erreur lors de la requête Fetch:", error);

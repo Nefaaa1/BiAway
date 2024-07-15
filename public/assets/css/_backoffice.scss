@@ -49,34 +49,30 @@
     padding: 2rem 1rem ;
 
     table{
-        border-collapse: collapse;
-        width: 100%;
-        thead{
-            display: none;
+        @include liste;
+    }
+    form{
+        fieldset{
+            width: 100%;
+            padding: 2rem 1rem;
+            label{
+                display: inline-block;
+                width: 33%;
+            }
+            input, select, textarea{
+                width: 65%;
+                @include input;
+                box-shadow: 0px 0px 8px 0px rgba(0,0,0,0.63);
+                -webkit-box-shadow: 0px 0px 8px 0px rgba(0,0,0,0.63);
+                -moz-box-shadow: 1px 0px 8px 0px rgba(0,0,0,0.63);
+                margin: 0 0.5rem;
+            }
         }
-        tr{
-            display: block;
-            margin-bottom: 1rem;
-            padding: 1rem;
-            transition: all 0.4s ease-in-out;
-        }
-        td{
-            display: block;
-            text-align: right;
-        }
-        td::before{
-            content:attr(data-nom);
-            float: left;
-            font-weight: bold;
-        }
-        tr:nth-child(even) {
-            background-color: #FAFAFF; 
-        }
-        .disabled_tr{
-            opacity: 0.4;
+
+        fieldset+fieldset{
+            border-top: 1px dotted #000;
         }
     }
-
 }
 
 .back_header{

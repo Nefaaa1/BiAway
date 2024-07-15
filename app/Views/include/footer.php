@@ -1,14 +1,12 @@
 <footer class="footer">
     <section class="lien_rapide">
-       <a href="/"><img src="public/assets/img/BiAway_Logo.png" alt="Logo BiAway"></a>
+       <a href="/"><img src="/public/assets/img/BiAway_Logo.png" alt="Logo BiAway"></a>
         <nav>
             <?php if(!isset($_SESSION['user'])){ ?>
             <a href="/loginpage">Connexion / Inscription</a> 
             <?php }else{ ?>
-            <a href="#">Mon compte</a>
+            <a href="/moncompte">Mon compte</a>
             <?php } ?> 
-            <a href="#">Contact</a>  
-            <a href="#">À Propos</a> 
             <?php if(isset($_SESSION['user'])){ ?>
             <a href="/deconnexion">Déconnexion</a>
             <?php } ?>
@@ -20,8 +18,8 @@
             <fieldset>
                 <input type="text" placeholder="Nom" name="nom">
                 <input type="text" placeholder="Prénom" name="prenom">
-                <input type="phone" placeholder="Téléphone" name="telephone">
-                <input type="mail" placeholder="Adresse mail" name="mail">
+                <input type="tel" placeholder="Téléphone" name="telephone">
+                <input type="email" placeholder="Adresse mail" name="mail">
                 <textarea name="message" placeholder="Message" cols="30" rows="10"></textarea>
                 <button type='submit'>Envoyer</button>
             </fieldset>

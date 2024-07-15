@@ -39,7 +39,7 @@ main{
 // }
 
 input.error{
-    border-bottom: red 2px solid;
+    border-bottom: red 2px solid !important;
 }
 
 button, .button{
@@ -47,13 +47,19 @@ button, .button{
     transition: all 0.4s ease-in-out;
     color: #fff;
     border-radius: $border-radius ;
-    padding: 1rem 4rem;
+    padding: 1rem 3.5rem;
     border: none;
-    margin-left: auto;
+    font-size: 1.4rem;
+    margin-right: 1rem;
     &:hover{
         background-color: $primary-color-hover;
     }
 }
+
+button.save span, .button.save span, button.delete span, .button.delete span, button.back span, .button.back span{
+    display: none;
+ }
+ 
 
 button:hover{
     cursor: pointer;
@@ -63,11 +69,11 @@ button:hover{
 
 .header{
     padding-top: 3rem;
-    border-radius: 0 0 $border-radius $border-radius ;
+   
     nav{
         background-color: $primary-color;
         border-radius: $border-radius;
-        width: 75%;
+        width: 85%;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -129,10 +135,11 @@ button:hover{
 }
 
 header.home-header{
-    height: 40rem;
-    background-image: url('../../assets/img/header.jpg');
+    height: 50rem;
+    background-image: url('../../assets/img/header.webp');
     background-size: cover;
     background-position: 80%;
+    position:relative;
 }
 
 // FOOTER
@@ -244,7 +251,10 @@ header.home-header{
 .container{
     margin-left: auto;
     margin-right: auto;
-    max-width: 75%;
+    max-width: 85%;
+    table.liste{
+        @include liste;
+    }
 }
 
 #message_inscription.success, #message_connexion.success{
@@ -255,4 +265,200 @@ header.home-header{
     color : #c40808;
 }
 
+.search_lodgement{
+    @include glassmorphism-header;
+    position: absolute;
+    width: 60%;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -45%);
+    padding: 1rem 2rem;
+    border-radius: $border-radius;
+    legend{
+        color:#fff;
+        font-size: 1.4rem;
+    }
+    form{
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+    button{
+        width: 100%;
+    }
+    input{
+        width: 100%;
+        @include glassmorphism-header-input;
+        &::placeholder{
+            color: #fff;
+        }
+        &:focus-visible {
+            outline:none;
+        }
+        color:#fff;
+    }
+    fieldset{
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+
+
+//PAGE HOME 
+
+.resultat_logement{
+    display: grid;
+    grid-gap: 2rem;
+    grid-template-columns: repeat(2, 1fr);
+    figure{
+        width: 100%;
+        height: 20rem;
+        margin: 0;
+        position: relative;
+        border-radius: $border-radius;
+        overflow: hidden;
+        cursor: pointer;
+        img{
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        figcaption{
+           
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 40%;
+            padding: 0.5rem;
+            color: #fff;
+            @include glassmorphism-card;
+            .price{
+                position: absolute;
+                bottom: 0;
+                right: 0;
+                @include glassmorphism-header-input;
+                border-radius: $border-radius 0 0 0;
+                padding: .5rem 1rem;
+                font-size: 1.3rem;
+            }
+            p{
+                margin-top: 0.5rem;
+            }
+        }
+    }
+}
+
+// PAGE LOGEMENT
+
+.lodgement_title{
+    color:$secondary-color;
+    font-size: 2.8rem;
+}
+
+.lodgement_picture{
+    border-radius: $border-radius;
+    overflow: hidden;
+    max-height: 25rem;
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    img{
+        max-width: 100%; 
+        max-height: 100%;
+        object-fit: contain; 
+    }
+}
+
+.lodgement_description{
+    border-radius: $border-radius;
+    background-color: $secondary-color;
+    padding: 1rem;
+    color: #fff;
+    i{
+        color:$primary-color;
+    }
+    h3{
+        display: inline-block;
+    }
+}
+
+.count_lodgement{
+    display: inline-block;
+    margin-left: 1rem;
+    font-size: 1.3rem;
+    padding: 1rem;
+    border-radius: $border-radius;
+    @include glassmorphism;
+}
+
+//MON COMPTE
+
+.motdepassechange{
+    background: $secondary-color;
+    color: #fff;
+    padding: 1rem;
+    border-radius: $border-radius;
+    label{
+        display: inline-block ;
+        width: 50%;
+    }
+    input{
+        @include input;
+        @include glassmorphism;
+        color: #fff;
+    }
+    button{
+        margin-top: 1rem;
+    }
+}
+
+
+.logement_user{
+    .button{
+        display: inline-block;
+        margin-bottom: 1rem;
+    }
+}
+
+#reponse_form{
+    position: fixed;
+    right: 0;
+    width: fit-content;
+    padding: 1rem 2rem;
+    border-radius: 1rem; 
+    color: #fff;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    opacity: 0;
+    &.error{
+        background: #dd0000;
+        animation: message 3s forwards;
+    }
+    &.success{
+        background: #00d100;
+        animation: message 3s forwards;
+    }
+}
+
+@keyframes message {
+    0% {
+      opacity: 0;
+      bottom: 0;
+    }
+    10% {
+      opacity: 1;
+      bottom: 3rem;
+    }
+    90% {
+      opacity: 1;
+      bottom: 3rem;
+    }
+    100% {
+      opacity: 0;
+      bottom: 0;
+    }
+  }
+
+@import "_responsive_tab.scss";
 @import "_responsive_desktop.scss";

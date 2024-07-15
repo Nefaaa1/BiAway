@@ -53,6 +53,9 @@
           backdrop-filter: blur(10px);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
+.backoffice_connexion input:focus-visible {
+  outline: none;
+}
 .backoffice_connexion button {
   background-color: #560000;
   margin: 1.2rem;
@@ -88,6 +91,31 @@
 }
 .content_back table .disabled_tr {
   opacity: 0.4;
+}
+.content_back form fieldset {
+  width: 100%;
+  padding: 2rem 1rem;
+}
+.content_back form fieldset label {
+  display: inline-block;
+  width: 33%;
+}
+.content_back form fieldset input, .content_back form fieldset select, .content_back form fieldset textarea {
+  width: 65%;
+  border-radius: 1rem;
+  padding: 1rem;
+  border: none;
+  background-color: transparent;
+  box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.63);
+  -webkit-box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.63);
+  -moz-box-shadow: 1px 0px 8px 0px rgba(0, 0, 0, 0.63);
+  margin: 0 0.5rem;
+}
+.content_back form fieldset input:focus-visible, .content_back form fieldset select:focus-visible, .content_back form fieldset textarea:focus-visible {
+  outline: none;
+}
+.content_back form fieldset + fieldset {
+  border-top: 1px dotted #000;
 }
 
 .back_header {
@@ -160,7 +188,7 @@ main section {
 }
 
 input.error {
-  border-bottom: red 2px solid;
+  border-bottom: red 2px solid !important;
 }
 
 button, .button {
@@ -168,12 +196,17 @@ button, .button {
   transition: all 0.4s ease-in-out;
   color: #fff;
   border-radius: 1rem;
-  padding: 1rem 4rem;
+  padding: 1rem 3.5rem;
   border: none;
-  margin-left: auto;
+  font-size: 1.4rem;
+  margin-right: 1rem;
 }
 button:hover, .button:hover {
   background-color: #d82d02;
+}
+
+button.save span, .button.save span, button.delete span, .button.delete span, button.back span, .button.back span {
+  display: none;
 }
 
 button:hover {
@@ -182,12 +215,11 @@ button:hover {
 
 .header {
   padding-top: 3rem;
-  border-radius: 0 0 1rem 1rem;
 }
 .header nav {
   background-color: #ff6039;
   border-radius: 1rem;
-  width: 75%;
+  width: 85%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -245,10 +277,11 @@ button:hover {
 }
 
 header.home-header {
-  height: 40rem;
-  background-image: url("../../assets/img/header.jpg");
+  height: 50rem;
+  background-image: url("../../assets/img/header.webp");
   background-size: cover;
   background-position: 80%;
+  position: relative;
 }
 
 .footer {
@@ -290,6 +323,9 @@ header.home-header {
           backdrop-filter: blur(10px);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
+.footer form input:focus-visible {
+  outline: none;
+}
 .footer form input::-moz-placeholder {
   color: #fff;
   opacity: 0.7;
@@ -311,6 +347,9 @@ header.home-header {
   -webkit-backdrop-filter: blur(10px);
           backdrop-filter: blur(10px);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.footer form textarea:focus-visible {
+  outline: none;
 }
 .footer form textarea::-moz-placeholder {
   color: #fff;
@@ -336,6 +375,9 @@ header.home-header {
   border: none;
   background-color: transparent;
 }
+#form_inscription input:focus-visible {
+  outline: none;
+}
 
 #form_inscription.show {
   display: block;
@@ -349,6 +391,9 @@ header.home-header {
   padding: 1rem;
   border: none;
   background-color: transparent;
+}
+#form_connexion input:focus-visible {
+  outline: none;
 }
 
 #form_connexion.show {
@@ -381,7 +426,35 @@ header.home-header {
 .container {
   margin-left: auto;
   margin-right: auto;
-  max-width: 75%;
+  max-width: 85%;
+}
+.container table.liste {
+  border-collapse: collapse;
+  width: 100%;
+}
+.container table.liste thead {
+  display: none;
+}
+.container table.liste tr {
+  display: block;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  transition: all 0.4s ease-in-out;
+}
+.container table.liste td {
+  display: block;
+  text-align: right;
+}
+.container table.liste td::before {
+  content: attr(data-nom);
+  float: left;
+  font-weight: bold;
+}
+.container table.liste tr:nth-child(even) {
+  background-color: #FAFAFF;
+}
+.container table.liste .disabled_tr {
+  opacity: 0.4;
 }
 
 #message_inscription.success, #message_connexion.success {
@@ -392,8 +465,237 @@ header.home-header {
   color: #c40808;
 }
 
+.search_lodgement {
+  background: rgba(212, 212, 212, 0.6980392157);
+  -webkit-backdrop-filter: blur(10px);
+          backdrop-filter: blur(10px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: absolute;
+  width: 60%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -45%);
+  padding: 1rem 2rem;
+  border-radius: 1rem;
+}
+.search_lodgement legend {
+  color: #fff;
+  font-size: 1.4rem;
+}
+.search_lodgement form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.search_lodgement button {
+  width: 100%;
+}
+.search_lodgement input {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.33);
+  -webkit-backdrop-filter: blur(10px);
+          backdrop-filter: blur(10px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 1rem;
+  padding: 1rem;
+  border: none;
+  color: #fff;
+}
+.search_lodgement input::-moz-placeholder {
+  color: #fff;
+}
+.search_lodgement input::placeholder {
+  color: #fff;
+}
+.search_lodgement input:focus-visible {
+  outline: none;
+}
+.search_lodgement fieldset {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.resultat_logement {
+  display: grid;
+  grid-gap: 2rem;
+  grid-template-columns: repeat(2, 1fr);
+}
+.resultat_logement figure {
+  width: 100%;
+  height: 20rem;
+  margin: 0;
+  position: relative;
+  border-radius: 1rem;
+  overflow: hidden;
+  cursor: pointer;
+}
+.resultat_logement figure img {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.resultat_logement figure figcaption {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 40%;
+  padding: 0.5rem;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+  -webkit-backdrop-filter: blur(10px);
+          backdrop-filter: blur(10px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.4);
+}
+.resultat_logement figure figcaption .price {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.33);
+  -webkit-backdrop-filter: blur(10px);
+          backdrop-filter: blur(10px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 1rem;
+  padding: 1rem;
+  border: none;
+  border-radius: 1rem 0 0 0;
+  padding: 0.5rem 1rem;
+  font-size: 1.3rem;
+}
+.resultat_logement figure figcaption p {
+  margin-top: 0.5rem;
+}
+
+.lodgement_title {
+  color: #560000;
+  font-size: 2.8rem;
+}
+
+.lodgement_picture {
+  border-radius: 1rem;
+  overflow: hidden;
+  max-height: 25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.lodgement_picture img {
+  max-width: 100%;
+  max-height: 100%;
+  -o-object-fit: contain;
+     object-fit: contain;
+}
+
+.lodgement_description {
+  border-radius: 1rem;
+  background-color: #560000;
+  padding: 1rem;
+  color: #fff;
+}
+.lodgement_description i {
+  color: #ff6039;
+}
+.lodgement_description h3 {
+  display: inline-block;
+}
+
+.count_lodgement {
+  display: inline-block;
+  margin-left: 1rem;
+  font-size: 1.3rem;
+  padding: 1rem;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  -webkit-backdrop-filter: blur(10px);
+          backdrop-filter: blur(10px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.motdepassechange {
+  background: #560000;
+  color: #fff;
+  padding: 1rem;
+  border-radius: 1rem;
+}
+.motdepassechange label {
+  display: inline-block;
+  width: 50%;
+}
+.motdepassechange input {
+  border-radius: 1rem;
+  padding: 1rem;
+  border: none;
+  background-color: transparent;
+  background: rgba(255, 255, 255, 0.1);
+  -webkit-backdrop-filter: blur(10px);
+          backdrop-filter: blur(10px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  color: #fff;
+}
+.motdepassechange input:focus-visible {
+  outline: none;
+}
+.motdepassechange button {
+  margin-top: 1rem;
+}
+
+.logement_user .button {
+  display: inline-block;
+  margin-bottom: 1rem;
+}
+
+#reponse_form {
+  position: fixed;
+  right: 0;
+  width: -moz-fit-content;
+  width: fit-content;
+  padding: 1rem 2rem;
+  border-radius: 1rem;
+  color: #fff;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  opacity: 0;
+}
+#reponse_form.error {
+  background: #dd0000;
+  animation: message 3s forwards;
+}
+#reponse_form.success {
+  background: #00d100;
+  animation: message 3s forwards;
+}
+
+@keyframes message {
+  0% {
+    opacity: 0;
+    bottom: 0;
+  }
+  10% {
+    opacity: 1;
+    bottom: 3rem;
+  }
+  90% {
+    opacity: 1;
+    bottom: 3rem;
+  }
+  100% {
+    opacity: 0;
+    bottom: 0;
+  }
+}
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+  .resultat_logement {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
 @media only screen and (min-width: 1024px) {
+  button.save span, .button.save span, button.delete span, .button.delete span, button.back span, .button.back span {
+    display: inline-block;
+  }
   .header {
+    border-radius: 0 0 1rem 1rem;
     max-width: 130rem;
     margin: 0 auto;
   }
@@ -432,6 +734,7 @@ header.home-header {
     margin-left: auto;
     margin-right: auto;
     max-width: 110rem;
+    margin-top: 6rem;
   }
   .container #form_inscription, .container #form_connexion {
     max-width: 33%;
@@ -464,5 +767,25 @@ header.home-header {
   .content_back #form_search input, .content_back #form_search select {
     width: 20%;
     margin-right: 3rem;
+  }
+  .search_lodgement {
+    width: 40%;
+    top: initial;
+    bottom: 0;
+    transform: translate(-50%, 50%);
+  }
+  .search_lodgement button {
+    width: initial;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, 55%);
+  }
+  .search_lodgement form {
+    flex-direction: row;
+    justify-content: space-evenly;
+  }
+  .resultat_logement {
+    grid-template-columns: repeat(4, 1fr);
   }
 }/*# sourceMappingURL=style.css.map */

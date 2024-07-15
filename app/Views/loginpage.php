@@ -5,7 +5,8 @@
             <fieldset>
                <input type="text" placeholder="Nom" name="lastname">
                <input type="text" placeholder="Prénom" name="firstname">
-               <input type="mail" placeholder="Mail" name="mail">
+               <input type="email" placeholder="Mail" name="mail">
+               <input type="tel" placeholder="Téléphone" name="phone">
                <input type="password" placeholder="Mot de passe" name="password">
                <button onclick="submitInscription(event)">M'inscrire</button>
             </fieldset>
@@ -15,7 +16,7 @@
 
         <form method="post"  id="form_connexion" class="show">
             <fieldset>
-               <input type="mail" placeholder="Mail" name="mail">
+               <input type="email" placeholder="Mail" name="mail">
                <input type="password" placeholder="Mot de passe" name="password">
                <button onclick="submitConnexion(event)">Connexion</button>
             </fieldset>
@@ -24,7 +25,7 @@
         </form>  
     </section>
 </main>
-<?php get_footer(); ?>
+
 
 <script>
     var switchForm = document.querySelectorAll(".toggleForm");
@@ -128,3 +129,5 @@
         });
     });
 </script>
+
+<?php get_footer(); ?>

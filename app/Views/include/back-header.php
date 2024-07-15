@@ -15,7 +15,7 @@
         <a href="/backoffice/dashboard">Accueil</a>
         <a href="/backoffice/utilisateurs">Utilisateurs</a>
         <a href="/backoffice/logements">Logement</a>
-        <a href="#">Avis</a>
+        <!-- <a href="/backoffice/reservations">Réservation</a> -->
         <a href="/backoffice/deconnexion">Déconnexion</a>
     </nav>
 </header>

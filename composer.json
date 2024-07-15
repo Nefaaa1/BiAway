@@ -6,6 +6,7 @@
         }
     },
     "require": {
-        "php": "^8.2"
+        "php": "^8.3",
+        "nikic/fast-route": "^1.3"
     }
 }

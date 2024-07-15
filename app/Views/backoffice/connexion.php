@@ -5,7 +5,7 @@
             <p>Connexion à votre backoffice</p>
             <form method="post"  id="back_connexion">
                 <fieldset>
-                    <input type="mail" placeholder="Mail" name="mail">
+                    <input type="email" placeholder="Mail" name="mail">
                 </fieldset>
                 <fieldset>
                     <input type="password" placeholder="Mot de passe" name="password">

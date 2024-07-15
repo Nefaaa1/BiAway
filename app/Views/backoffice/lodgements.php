@@ -28,7 +28,7 @@
                 var resultat = document.getElementById('liste_resultat');
                 var form = document.getElementById("form_search");
                 var formData = new FormData(form);
-                fetch('/search_lodgment', {
+                fetch('/search_lodgement', {
                     method: "POST",
                     body : formData
                 })
@@ -50,7 +50,7 @@
                             let id= this.getAttribute('data-id');
                             window.location.href = `/backoffice/logement/${id}`;
                         });
-            });
+                    });
                 })
                 .catch(error => {
                     console.error(error);

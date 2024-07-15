@@ -1,3 +1,17 @@
+@mixin glassmorphism-header {
+  background: #D4D4D4B2; 
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+}
+@mixin glassmorphism-header-input {
+  background: rgb(0 0 0 / 33%); 
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+  border-radius: $border-radius;
+  padding: 1rem;
+  border:none;
+}
+
 @mixin glassmorphism {
     background: rgba(255, 255, 255, 0.1); 
     backdrop-filter: blur(10px);
@@ -10,10 +24,48 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
 }
 
+@mixin glassmorphism-card {
+  background: rgba(255, 255, 255, 0.1); 
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+  border-top: 1px solid #FFFFFF66;
+}
+
 @mixin input {
   border-radius: $border-radius;
   padding: 1rem;
   border: none;
   background-color: transparent;
+    &:focus-visible {
+        outline:none;
+    }
+}
 
+@mixin liste {
+  border-collapse: collapse;
+  width: 100%;
+  thead{
+      display: none;
+  }
+  tr{
+      display: block;
+      margin-bottom: 1rem;
+      padding: 1rem;
+      transition: all 0.4s ease-in-out;
+  }
+  td{
+      display: block;
+      text-align: right;
+  }
+  td::before{
+      content:attr(data-nom);
+      float: left;
+      font-weight: bold;
+  }
+  tr:nth-child(even) {
+      background-color: #FAFAFF; 
+  }
+  .disabled_tr{
+      opacity: 0.4;
+  }
 }

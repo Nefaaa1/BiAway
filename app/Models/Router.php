@@ -6,6 +6,7 @@ class Router {
     private $routes = array(
         '/' => 'HomeController@index',
         '/loginpage' => 'LoginController@index',
+        '/logement/([0-9]+)' => 'LodgementController@index',
         '/inscription' => 'LoginController@inscription',
         '/connexion' => 'LoginController@connexion',
         '/deconnexion' => 'LoginController@deconnexion',
@@ -21,8 +22,9 @@ class Router {
         '/backoffice/utilisateur/([0-9]+)' => 'Backoffice\UtilisateursController@voir', // Utilisateur fin
         '/backoffice/logements' => 'Backoffice\LodgementsController@listes', // Logement debut
         '/backoffice/logement' => 'Backoffice\LodgementsController@ajouter',
-        '/search_lodgment' => 'Backoffice\LodgementsController@recherche',
-        '/save_logement' => 'Backoffice\LodgementsController@save',
+        '/search_lodgement' => 'HomeController@recherche',
+        '/save_lodgement' => 'Backoffice\LodgementsController@save',
+        '/delete_lodgement' => 'Backoffice\LodgementsController@delete',
         '/backoffice/logement/([0-9]+)' => 'Backoffice\LodgementsController@voir', // Logement fin
     );
 
@@ -36,7 +38,7 @@ class Router {
                 return;
             }
         }
-        echo "404 Not Found";
+        require_once $_SERVER['DOCUMENT_ROOT']. '/app/Views/404.php';
     }
 
     private function controllerAction($controllerAction) {

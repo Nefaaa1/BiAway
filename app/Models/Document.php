@@ -4,22 +4,18 @@ namespace App\Models;
 use PDO;
 use PDOException;
 
-class User extends Database {
+class Document extends Database {
 
     private $pdo;
     public $id ="";
-    public $actif ="1";
-    public $id_role ="2";
-    public $firstname ="";
-    public $lastname ="";
-    public $mail ="";
-    public $phone ="";
-    public $password ="";
-    public $picture ="";
     public $creation ="";
     public $modification ="";
-    public $last_connexion ="";
-    
+    public $actif ="1";
+    public $id_liaison ="";
+    public $type_liaison ="";
+    public $name ="";
+    public $path ="";
+    public $extension ="";    
 
     public function __construct() {
         $this->pdo = parent::getInstance();
@@ -29,21 +25,18 @@ class User extends Database {
         if (property_exists($this, $k)) {
             switch($k){
                 case 'id' :  $this->$k = intval($v); break;
-                case 'id_role' :  $this->$k = ($v == "" ? 2 : intval($v)); break;
-                case 'firstname' :  $this->$k = ucfirst($v); break;
-                case 'lastname' : $this->$k = strtoupper($v); break;
-                case 'mail' : $this->$k = strtolower($v); break;
-                case 'phone' : $this->$k = strtolower($v); break;
-                case 'password' : $this->$k = $v; break;
-                case 'picture' : $this->$k = ($v == "" ? NULL : $v); break;
                 case 'creation' : $this->$k = ($v == "" ? NULL : $v); break;
                 case 'modification' : $this->$k = ($v == "" ? NULL : $v); break;
-                case 'last_connexion' : $this->$k = ($v == "" ? NULL : $v); break;
                 case 'actif' : $this->$k = ($v == "" ? 0 : $v); break;
+                case 'id_liaison' :  $this->$k = ($v == "" ? NULL : intval($v)); break;
+                case 'type_liaison' :  $this->$k = strtolower($v); break;
+                case 'name' : $this->$k = strtoupper($v); break;
+                case 'path' : $this->$k = $v; break;
+                case 'extension' : $this->$k = strtoupper($v); break;             
                 default : $this->$k = $v;
             }
         }else{
-            echo 'La propriété n\'existe pas !';
+            echo 'La propriété $k n\'existe pas !';
         }
     }
 
@@ -51,19 +44,20 @@ class User extends Database {
         if (property_exists($this, $k)) {
             return $this->$k = $v;
         }else{
-            return 'La propriété n\'existe pas !';
+            return 'La propriété $k n\'existe pas !';
         }
     }
 
     public function get($id){
         if ($id != 0) {
             try{
-                $sql ='SELECT * FROM users WHERE id=?';
+                $sql ='SELECT * FROM documents WHERE id=?';
                 $stmt = $this->pdo->prepare($sql);
-                $stmt->execute(array($id));
+                $stmt->bindParam(1, $id, PDO::PARAM_INT);
+                $stmt->execute();
                 $this->setData($stmt->fetch(PDO::FETCH_ASSOC));
             }catch(PDOException $e){
-                echo "Erreur lors de la recupération de l'user ".$id." : " . $e->getMessage();
+                echo "Erreur lors de la recupération du document ".$id." : " . $e->getMessage();
             }
         }else{
             return 'L\'id est incorrect !';
@@ -72,25 +66,15 @@ class User extends Database {
 
     public function getBy($k, $v){
             try{
-                $sql ="SELECT id FROM users WHERE $k=?";
+                $sql ="SELECT id FROM documents WHERE $k=?";
                 $stmt = $this->pdo->prepare($sql);
-                $stmt->execute(array($v));
+                $stmt->bindParam(1, $v, PDO::PARAM_STR);
+                $stmt->execute();
                 return $stmt->fetch(PDO::FETCH_ASSOC);
             }catch(PDOException $e){
-                echo "Aucun utilisateur trouvé :" . $e->getMessage();
+                echo "Aucun document trouvé :" . $e->getMessage();
             }
     }
-
-    public function getByAdmin($k, $v){
-        try{
-            $sql ="SELECT id FROM users WHERE id_role=1 AND $k=?";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute(array($v));
-            return $stmt->fetch(PDO::FETCH_ASSOC);
-        }catch(PDOException $e){
-            echo "Aucun utilisateur trouvé :" . $e->getMessage();
-        }
-}
 
     public function save(){
         if($this->id == 0){
@@ -102,7 +86,7 @@ class User extends Database {
                 if ($k != "pdo" && $k != "id")
                     $req[]= $k.'= :'.$k;
             }
-            $sql ='UPDATE users SET '. implode(", ", $req) .' WHERE id=:id';
+            $sql ='UPDATE documents SET '. implode(", ", $req) .' WHERE id=:id';
             
             try{
                 $stmt = $this->pdo->prepare($sql);
@@ -112,7 +96,7 @@ class User extends Database {
                 }
                 $stmt->execute();
             }catch(PDOException $e){
-                echo "Erreur lors de la mise à jour de l'utilisateur : " . $e->getMessage();
+                echo "Erreur lors de la mise à jour du document : " . $e->getMessage();
             }
         }
     }
@@ -128,7 +112,7 @@ class User extends Database {
                 $val[]=':'.$k;
             }       
         }
-        $sql ='INSERT INTO users ( '. implode(",", $req) .' ) VALUES ( '. implode(",", $val) .' )';
+        $sql ='INSERT INTO documents ( '. implode(",", $req) .' ) VALUES ( '. implode(",", $val) .' )';
         try{
             $stmt = $this->pdo->prepare($sql);
             foreach(array_keys(get_object_vars($this)) as $k){
@@ -137,7 +121,7 @@ class User extends Database {
             }
             $stmt->execute();
         }catch(PDOException $e){
-            echo "Erreur lors de l'ajout de l'utilisateur : " . $e->getMessage();
+            echo "Erreur lors de l'ajout du document : " . $e->getMessage();
             echo $sql;
         }
     }
@@ -145,24 +129,6 @@ class User extends Database {
     public function delete(){
         $this->actif = 0;
         $this->save();
-    }
-
-    public function verif_mail($mail){
-        
-        $sql ='SELECT id FROM users WHERE mail=:mail AND id !="'. $this->id.'"';
-        try{
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->bindValue(':' .'mail', $mail);
-            $stmt->execute();
-            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        }catch(PDOException $e){
-            echo "Erreur lors de l'ajout de l'utilisateur : " . $e->getMessage();
-            echo $sql;
-        }
-        if (count($data) == 0)
-            return false;
-        else    
-            return true;
     }
 
     public function setData($data = array()){
@@ -186,34 +152,27 @@ class User extends Database {
         return $data;
     }
 
-    public static function getAllUsers($pdo, $req = array()){
+    public static function search($pdo, $req = array()){
         $where = array();
         $val = array();
 
-        //id_role
-        if(isset($req['id_role']) && $req['id_role'] !=''){
-            $where[]= 'AND users.id_role=?';
-            $val[]=$req['id_role'];
+        //id_lodgement
+        if(isset($req['id_lodgement']) && $req['id_lodgement'] !=''){
+            $where[]= 'AND documents.id_liaison=?';
+            $val[]=$req['id_lodgement'];
         }
 
-         //recherche
-         if(isset($req['recherche']) && $req['recherche'] !=''){
-            $where[]= 'AND (users.firstname LIKE "%'.$req["recherche"].'%" OR users.lastname LIKE "%'.$req["recherche"].'%" OR users.mail LIKE "%'.$req["recherche"].'%")';
-        }
-
-        $sql ='SELECT users.*, roles.name AS role_name
-                FROM users
-                INNER JOIN roles ON users.id_role = roles.id
+        $sql ='SELECT documents.*
+                FROM documents
                 WHERE 1
-                '. implode(' ',  $where).'
-                ORDER BY users.id_role,users.lastname,users.firstname';
+                '. implode(' ',  $where);
 
         try {
             $query = $pdo->prepare($sql);
             $query->execute($val);
             return $query->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            echo "Erreur lors de la récupération des utilisateurs : " . $e->getMessage();
+            echo "Erreur lors de la récupération des documents : " . $e->getMessage();
             return [];
         }
     }
