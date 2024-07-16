@@ -24,6 +24,12 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
 }
 
+@mixin glassmorphism-menu-back {
+  background: #96000057; 
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+}
+
 @mixin glassmorphism-card {
   background: rgba(255, 255, 255, 0.1); 
   backdrop-filter: blur(10px);
@@ -56,6 +62,14 @@
   td{
       display: block;
       text-align: right;
+      a{
+        margin: 0 1rem 0 0;
+        font-size: 1rem;
+        padding: 1rem 2rem;
+      }
+      a:last-child{
+        margin: 0;
+      }
   }
   td::before{
       content:attr(data-nom);

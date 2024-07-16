@@ -2,6 +2,7 @@
 namespace App\Controllers;
 use App\Models\Lodgement;
 use App\Models\User;
+use App\Models\Reservation;
 use App\Models\Database;
 use Exception;
 
@@ -17,7 +18,23 @@ class LodgementController {
             'lastname' => $user->lastname,
             'count_lodgement'=> count($lodgements)
          );
-        $data['lodgement'] = $lodgement->getData();    
+        $data['lodgement'] = $lodgement->getData();
+
+        //recupération de la longitude et latitude pour l'affichage de la map 
+        $url = "https://api-adresse.data.gouv.fr/search/?q=".urlencode($data['lodgement']['city'])."&type=municipality&limit=1";
+        $response = file_get_contents($url);
+        $response = json_decode($response, true);
+        $data['latitude'] = $response['features'][0]['geometry']['coordinates'][1];
+        $data['longitude'] = $response['features'][0]['geometry']['coordinates'][0];    
+        
+        //vérification si reserver
+        $data['is_reserved'] =false;
+        if (isset($_SESSION['user'])){
+            $verif = Reservation::IsReserved(Database::getInstance(), $_SESSION['user']['id'], $data['lodgement']['id'] );
+            if($verif){ 
+                $data['is_reserved'] =true;
+            }
+        }
         require_once $_SERVER['DOCUMENT_ROOT']. '/app/Views/lodgement.php';
     }
 
@@ -60,6 +77,7 @@ class LodgementController {
             exit();
         }
     }
+
     public function delete(){
         $u=new Lodgement();
         $u->get($_POST['id']);
@@ -88,6 +106,31 @@ class LodgementController {
         try {
             $u->delete();
             echo json_encode(['status' => 'success', 'message' => 'Suppression réussie !']);
+            exit();
+        } catch (Exception $e) {
+            echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
+            exit();
+        }
+    }
+
+    public function reservation(){
+        $obligatoire= array('start','end', 'id_lodgement','id_user');
+        $error = array();
+        $_POST['id_user']=$_SESSION['user']['id'];
+        foreach ($obligatoire as $o){
+            if($_POST[$o] =="")
+                $error[$o]= 'Information obligatoire !';
+        }
+        if(count($error)>0){
+            echo json_encode(['status' => 'error', 'key' => $error,  'message' => 'Informations obligatoires manquante !']);
+            exit();
+        }
+
+        $r=new Reservation();
+        $r->setData($_POST);
+        try {
+            $r->save();
+            echo json_encode(['status' => 'success', 'message' => 'Réservation envoyée !']);
             exit();
         } catch (Exception $e) {
             echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);

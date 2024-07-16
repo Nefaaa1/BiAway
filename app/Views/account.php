@@ -1,8 +1,9 @@
 <?php get_header(); ?>
 <main class="container">
     <div id="reponse_form"></div>
-    <h2 class="">Mon compte</h2>
+    <h1 class="">Mon compte</h1>
     <section class="motdepassechange">
+        <h2 class="">Changement de mot de passe</h2>
         <form method="POST">
             <fieldset>
                 <label for="old_password">Mot de passe actuel :</label>
@@ -16,10 +17,12 @@
             <button onclick="submitPassword(event)" >Changer mon mot de passe</button>
         </form>
     </section>
-    <h2 class="">Mes logements</h2>
+    
     <section class="logement_user">
-       <a href="moncompte/logement/ajouter" class="button">Ajouter un logement</a>
-       <table class="liste">
+        <h2 class="">Mes logements</h2>
+        <a href="moncompte/logement/ajouter" class="button">Ajouter un logement</a>
+        <?php if(count($data['logements']) > 0){ ?>
+        <table class="liste">
             <thead>
                 <tr>
                     <th>Titre</th>
@@ -30,31 +33,52 @@
             </thead>
             <tbody >
                 <?php foreach ($data['logements'] as $k=>$v){ ?>
-                <tr data-id="<?= $v['id'] ?>">
-                    <td data-nom='Titre'><?= $v['title'] ?></td>
-                    <td data-nom='Nombre de place'><?= $v['peoples'] ?></td>
-                    <td data-nom='Prix'><?= $v['price'] ?>€</td>
-                    <td data-nom='Ville'><?= $v['city'] ?></td>
+                <tr>
+                    <td data-nom='Titre'><?= htmlspecialchars($v['title']) ?></td>
+                    <td data-nom='Nombre de place'><?= htmlspecialchars($v['peoples']) ?></td>
+                    <td data-nom='Prix'><?= htmlspecialchars($v['price']) ?>€</td>
+                    <td data-nom='Ville'><?= htmlspecialchars($v['city']) ?></td>
+                    <td data-nom='Action'>
+                        <a href="moncompte/logement/reservation/<?= $v['id'] ?>" class="button tooltip" data-tooltip="Mes réservations"><i class="fa-solid fa-calendar"></i></a>
+                        <a href="moncompte/logement/modifier/<?= $v['id'] ?>" class="button"><i class="fa-solid fa-pen"></i></a>
+                    </td>
                 </tr>
                 <?php } ?>
             </tbody>
         </table>
+        <?php } else{ ?>
+            <p>Vous n'avez aucun logement.</p>
+        <?php } ?>
     </section>
-    
+    <section>
+        <h2 class="">Mes demandes de reservations</h2>
+        <?php if(count($data['reservations']) > 0){ ?>
+            <table class="liste">
+            <thead>
+                <tr>
+                    <th>Date de la demande</th>
+                    <th>Début</th>
+                    <th>Fin</th>
+                </tr>
+            </thead>
+            <tbody >
+                <?php foreach ($data['reservations'] as $k=>$v){ ?>
+                <tr>
+                    <td data-nom='Date de la demande'><?= (new DateTime(htmlspecialchars($v['creation'])))->format('d/m/y') ?></td>
+                    <td data-nom='Début'><?= (new DateTime(htmlspecialchars($v['start'])))->format('d/m/y') ?></td>
+                    <td data-nom='Fin'><?= (new DateTime(htmlspecialchars($v['end'])))->format('d/m/y') ?></td>
+                </tr>
+                <?php } ?>
+            </tbody>
+        </table>
+        <?php } else{ ?>
+            <p>Vous n'avez pas fait de demande de réservation </p>
+        <?php } ?>
+    </section>
 </main>
 
 
 <script>
-    document.addEventListener('DOMContentLoaded', function(){
-        var resultats = document.querySelectorAll('.liste tr');
-        resultats.forEach(result => {
-            result.addEventListener('click',function(e){
-                let id= this.getAttribute('data-id');
-                window.location.href = `moncompte/logement/modifier/${id}`;
-            });
-        });
-    })
-
     function submitPassword(event){
         event.preventDefault()
         var input_form= document.querySelectorAll(".motdepassechange form input");

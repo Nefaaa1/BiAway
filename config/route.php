@@ -11,12 +11,14 @@ $routes = FastRoute\simpleDispatcher(function (RouteCollector $r) {
     //LOGEMENT
     $r->addRoute('POST', '/search_lodgement', 'HomeController@recherche');
     $r->addRoute('GET', '/logement/{id:\d+}', 'LodgementController@index');
+    $r->addRoute('POST', '/logement/reservation', 'LodgementController@reservation');
     //MON COMPTE
     $r->addRoute('GET', '/moncompte', 'AccountController@index');
     $r->addGroup('/moncompte', function(RouteCollector $r) {
         $r->addRoute('GET', '/logement/ajouter', 'AccountController@ajouter_logement');
         $r->addRoute('GET', '/logement/modifier/{id:\d+}', 'AccountController@modifier_logement');
         $r->addRoute('POST', '/change_password', 'AccountController@change_password');
+        $r->addRoute('GET', '/logement/reservation/{id:\d+}', 'AccountController@reservation');
     });
     //BACKOFFICE
     $r->addRoute('GET', '/backoffice', 'BackOfficeController@index');

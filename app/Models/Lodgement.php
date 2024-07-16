@@ -3,6 +3,7 @@
 namespace App\Models;
 use PDO;
 use PDOException;
+use Exception;
 
 class Lodgement extends Database {
 
@@ -62,7 +63,7 @@ class Lodgement extends Database {
                 $stmt->execute();
                 $this->setData($stmt->fetch(PDO::FETCH_ASSOC));
             }catch(PDOException $e){
-                echo "Erreur lors de la recupération du logement ".$id." : " . $e->getMessage();
+                throw new Exception("Erreur lors de la recupération du logement ".$id." : " . $e->getMessage());
             }
         }else{
             return 'L\'id est incorrect !';
@@ -77,7 +78,7 @@ class Lodgement extends Database {
                 $stmt->execute();
                 return $stmt->fetch(PDO::FETCH_ASSOC);
             }catch(PDOException $e){
-                echo "Aucun logement trouvé :" . $e->getMessage();
+                throw new Exception("Aucun logement trouvé :" . $e->getMessage());
             }
     }
 
@@ -101,7 +102,7 @@ class Lodgement extends Database {
                 }
                 $stmt->execute();
             }catch(PDOException $e){
-                echo "Erreur lors de la mise à jour du logement : " . $e->getMessage();
+                throw new Exception("Erreur lors de la mise à jour du logement : " . $e->getMessage());
             }
         }
     }
@@ -126,8 +127,7 @@ class Lodgement extends Database {
             }
             $stmt->execute();
         }catch(PDOException $e){
-            echo "Erreur lors de l'ajout du logement : " . $e->getMessage();
-            echo $sql;
+            throw new Exception("Erreur lors de l'ajout du logement : " . $e->getMessage());
         }
     }
     
@@ -188,7 +188,7 @@ class Lodgement extends Database {
             $query->execute($val);
             return $query->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            echo "Erreur lors de la récupération des logements : " . $e->getMessage();
+            throw new Exception("Erreur lors de la récupération des logements : " . $e->getMessage());
             return [];
         }
     }

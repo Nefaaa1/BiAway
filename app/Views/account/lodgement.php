@@ -21,9 +21,11 @@
                 <label for="peoples">Nombre de personne</label>
                 <input type="number" id="peoples" placeholder="" name="peoples" value="<?= $data['lodgement']['peoples'] ?>">
             </fieldset>
-            <label for="photo">Choisissez une photo :</label>
-             <input type="file" id="picture" name="picture" accept="image/*">
-             <fieldset>
+            <fieldset>
+                <label for="photo">Choisissez une photo :</label>
+                <input type="file" id="picture" name="picture" accept="image/*">
+            </fieldset>
+            <fieldset>
                 <label for="description">Description</label>
                 <textarea name="description" id="description" cols="30" rows="10"><?= $data['lodgement']['description'] ?></textarea>
             </fieldset>

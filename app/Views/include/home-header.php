@@ -13,6 +13,7 @@
     <nav>
         <a href="/"><img src="public/assets/img/BiAway_Logo.png" alt="Logo BiAway"></a>
         <i class="fa-solid fa-bars menu-burger"></i>
+        <div class="menu_header">
         <?php if(!isset($_SESSION['user'])){ ?>
         <a href="/loginpage" class="menu-desktop">Connexion / Inscription</a>
         <?php }else{ ?>
@@ -20,9 +21,10 @@
         <a href="/backoffice" class="menu-desktop">Gestion du site</a>
         <?php }} ?>
         <?php if(isset($_SESSION['user'])){ ?>
-        <a href="/moncompte" class="menu-desktop"><i class="fa-regular fa-user"></i></a>
+        <a href="/moncompte" class="menu-desktop">Mon compte</a>
         <a href="/deconnexion" class="menu-desktop"><i class="fa-solid fa-right-from-bracket"></i></a>
         <?php } ?>
+        </div>
     </nav>
     <div class="menu-list">
         <ul>

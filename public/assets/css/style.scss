@@ -1,7 +1,7 @@
 @import "_variables.scss";
 @import "_font.scss";
 @import "_mixin.scss";
-@import "_backoffice.scss";
+
 
 // GENERAL
 
@@ -32,6 +32,22 @@ main{
         margin-top: 2rem;
         margin-bottom: 2rem;
     }
+}
+
+h1:not(.h1_back){
+    color :$secondary-color;
+    position: relative;
+}
+
+h1:not(.h1_back):after{
+    content: '';
+    display: block;
+    width: 20%;
+    height: 0.3rem;
+    background-color: $primary-color;
+    position: absolute;
+    left: 0;
+    bottom: -1rem;
 }
 
 // input, textarea{
@@ -65,11 +81,39 @@ button:hover{
     cursor: pointer;
 }
 
+.tooltip{
+    position: relative;
+}
+
+.tooltip::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 110%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #fff;
+    color: $secondary-color;
+    border: 2px solid $secondary-color;
+    padding: 5px 10px;
+    border-radius: 4px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease-in-out;
+    visibility: hidden;
+    font-size: 1.3rem;
+}
+
+
+.tooltip:hover::after {
+    opacity: 1;
+    visibility: visible;
+}
+
 // HEADER
 
 .header{
     padding-top: 3rem;
-   
     nav{
         background-color: $primary-color;
         border-radius: $border-radius;
@@ -124,14 +168,13 @@ button:hover{
                 margin-bottom: 1.5rem;
             }
         }
-        
-
     }
     .show-menu {
         top: 0;
     }
-
-    
+}
+.menu_header{
+    display: none;
 }
 
 header.home-header{
@@ -369,7 +412,7 @@ header.home-header{
     }
 }
 
-.lodgement_description{
+.lodgement_description, .lodgement_reservation{
     border-radius: $border-radius;
     background-color: $secondary-color;
     padding: 1rem;
@@ -381,14 +424,37 @@ header.home-header{
         display: inline-block;
     }
 }
+.lodgement_reservation{
+    p{
+        font-style: italic;
+    }
+}
 
-.count_lodgement{
+.details_lodgement{
     display: inline-block;
     margin-left: 1rem;
     font-size: 1.3rem;
     padding: 1rem;
     border-radius: $border-radius;
     @include glassmorphism;
+}
+
+#reservation_form{
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+    label{
+        display: inline-flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 1rem;
+    }
+    input{
+        @include input;
+        @include glassmorphism;
+        color: #fff;
+    }
 }
 
 //MON COMPTE
@@ -412,11 +478,37 @@ header.home-header{
     }
 }
 
-
 .logement_user{
     .button{
         display: inline-block;
         margin-bottom: 1rem;
+    }
+}
+.lodgement_form{
+    border-radius: $border-radius;
+    background-color: $secondary-color;
+    padding: 1rem;
+    color: #fff;
+    h3{
+        display: inline-block;
+    }
+    fieldset{
+        display: flex;
+        flex-direction: column;
+    }
+    input{
+        @include input;
+        @include glassmorphism;
+        color: #fff;
+        &::placeholder{
+            z-index: 2;
+        }
+    }
+    textarea{
+        @include input;
+        @include glassmorphism;
+        color: #fff;
+        resize: none;
     }
 }
 
@@ -459,6 +551,6 @@ header.home-header{
       bottom: 0;
     }
   }
-
+@import "_backoffice.scss";
 @import "_responsive_tab.scss";
 @import "_responsive_desktop.scss";

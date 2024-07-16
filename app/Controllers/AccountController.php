@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\Lodgement;
+use App\Models\Reservation;
 use App\Models\Database;
 use App\Models\User;
 use Exception;
@@ -15,6 +16,7 @@ if(!isset($_SESSION['user'])){
 class AccountController {
     public function index() {
         $data['logements'] = Lodgement::getAllLodgements(Database::getInstance(), array('id_user'=>$_SESSION['user']['id']));
+        $data['reservations'] =Reservation::getAllreservation(Database::getInstance(), array('id_user' => $_SESSION['user']['id']));;
         require_once $_SERVER['DOCUMENT_ROOT']. '/app/Views/account.php';
     }
 
@@ -31,6 +33,14 @@ class AccountController {
         $data['lodgement']=$lodgement->getData();
         $data['button']='Modifier le logement'; 
         require_once $_SERVER['DOCUMENT_ROOT']. '/app/Views/account/lodgement.php';
+    }
+
+    public function reservation($id) {
+        $lodgement = new Lodgement();
+        $lodgement->get($id);
+        $data['lodgement']=$lodgement->getData();
+        $data['reservation'] = Reservation::getAllreservation(Database::getInstance(), array('id_lodgement' =>$id));
+        require_once $_SERVER['DOCUMENT_ROOT']. '/app/Views/account/reservation.php';
     }
     
 

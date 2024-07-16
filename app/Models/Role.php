@@ -3,6 +3,7 @@
 namespace App\Models;
 use PDO;
 use PDOException;
+use Exception;
 
 class Role extends Database {
 
@@ -42,7 +43,7 @@ class Role extends Database {
                 $stmt->execute();
                 $this->setData($stmt->fetch(PDO::FETCH_ASSOC));
             }catch(PDOException $e){
-                echo "Erreur lors de la recupération de l'user ".$id." : " . $e->getMessage();
+                throw new Exception("Erreur lors de la recupération de l'user ".$id." : " . $e->getMessage());
             }
         }else{
             return 'L\'id est incorrect !';
@@ -57,7 +58,7 @@ class Role extends Database {
                 $stmt->execute();
                 return $stmt->fetch(PDO::FETCH_ASSOC);
             }catch(PDOException $e){
-                echo "Aucun utilisateur trouvé :" . $e->getMessage();
+                throw new Exception("Aucun utilisateur trouvé :" . $e->getMessage());
             }
     }
 
@@ -80,7 +81,7 @@ class Role extends Database {
                 }
                 $stmt->execute();
             }catch(PDOException $e){
-                echo "Erreur lors de la mise à jour de l'utilisateur : " . $e->getMessage();
+                throw new Exception("Erreur lors de la mise à jour de l'utilisateur : " . $e->getMessage());
             }
         }
     }
@@ -103,8 +104,7 @@ class Role extends Database {
             }
             $stmt->execute();
         }catch(PDOException $e){
-            echo "Erreur lors de l'ajout de l'utilisateur : " . $e->getMessage();
-            echo $sql;
+            throw new Exception("Erreur lors de l'ajout de l'utilisateur : " . $e->getMessage());
         }
     }
 
@@ -129,7 +129,7 @@ class Role extends Database {
             $query = $pdo->query($sql);
             return $query->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            echo "Erreur lors de la récupération des utilisateurs : " . $e->getMessage();
+            throw new Exception("Erreur lors de la récupération des utilisateurs : " . $e->getMessage());
             return [];
         }
     }

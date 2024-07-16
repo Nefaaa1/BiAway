@@ -11,6 +11,12 @@
     background-size: cover;
     background-position: 80%;
 }
+
+.h1_back{
+    margin: 0;
+    color: #fff;
+    font-size: 2rem;
+}
 .backoffice_connexion{
     padding: 1rem;
     border-radius: $border-radius;
@@ -74,20 +80,63 @@
         }
     }
 }
-
 .back_header{
-    background-color: $secondary-color;
-    padding: 1rem 0;
-
-    a{
-       color: #fff; 
-    }
-    a:hover{
-        color: $primary-color;
-    }
     nav{
+        background-color: $secondary-color;
+        width: 100%;
         display: flex;
-        justify-content: space-around;
+        justify-content: space-between;
+        align-items: center;
+        height: 3rem;
+        padding: 2rem 3rem;
+        margin: 0 auto;
+        a{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            img{
+                margin-top: 0.4rem;
+                width: 7rem;
+                height: auto;
+            }
+            &.menu-desktop{
+                display: none;
+            }
+        }
+        i{
+            color:#fff;
+            cursor: pointer;
+        }   
+    }
+    .menu-list{
+        z-index: 2;
+        display: block;
+        width: 100%;
+        position: absolute;
+        top: -25rem;
+        left: 0;
+        height: auto;
+        background: #96000057;
+        border-bottom: $secondary-color 0.2rem solid;
+        @include glassmorphism-menu-back ;
+        transition: all 1s ease-in-out;
+        ul{
+            li {
+                list-style-type: none;
+                margin-bottom: 1rem;
+                a{
+                    color:#fff;
+                    font-weight: bold;
+                }
+            }
+            li:first-child{
+                border-bottom: #fff 1px solid;
+                margin-bottom: 1.5rem;
+            }
+        }
+    }
+    .show-menu {
+        top: 0;
     }
 }
 
