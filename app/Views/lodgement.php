@@ -2,46 +2,61 @@
 <main class="container">
     <p id="reponse_form"></p>
     <h1 class="lodgement_title"><?= htmlspecialchars($data['lodgement']['title']) ?></h1>
-    <section class="lodgement_picture">
-        <img src="/public/assets/img/lodgements/<?= $data['lodgement']['picture'] != null ? htmlspecialchars($data['lodgement']['picture']) : "default_lodgment.webp"  ?>" alt="photo du logement">
-    </section>
+    <img class="lodgement_picture" src="/public/assets/img/lodgements/<?= $data['lodgement']['picture'] != null ? htmlspecialchars($data['lodgement']['picture']) : "default_lodgment.webp"  ?>" alt="photo du logement">
     <section class="lodgement_description">
-        <h2>Logement de <?= htmlspecialchars($data['user']['firstname']); ?></h2>
-        <div class="details_lodgement"><i class="fa-solid fa-house"></i> <?= htmlspecialchars($data['user']['count_lodgement']); ?> Logements</div>
-        <div class="details_lodgement"><i class="fa-solid fa-users"></i> <?= htmlspecialchars($data['lodgement']['peoples']); ?> Voyageurs</div>
-        <div class="details_lodgement"><i class="fa-solid fa-euro-sign"></i> <?= htmlspecialchars($data['lodgement']['price']); ?> € / nuit</div>
-        <p> <?= nl2br(htmlspecialchars($data['lodgement']['description'])); ?></p>
-        <iframe
-            width="100%"
-            height="200"
-            frameborder="0"
-            scrolling="no"
-            marginheight="0"
-            marginwidth="0"
-            src="https://www.openstreetmap.org/export/embed.html?bbox=<?= (htmlspecialchars($data['longitude'])-0.02) . ',' . (htmlspecialchars($data['latitude'])-0.02) . ',' . (htmlspecialchars($data['longitude'])+0.02) . ',' . (htmlspecialchars($data['latitude'])+0.02); ?>&layer=mapnik"
-            >
-            
-        </iframe>       
+        <div class="grid1">
+            <img src="/public/assets/img/users/<?= $data['user']['picture'] != null ? htmlspecialchars($data['user']['picture']) : "default_user.png"  ?>" alt="photo du propriétaire du logement">
+            <div class="all_details">
+                <span class="details_lodgement"><i class="fa-solid fa-house"></i> <?= htmlspecialchars($data['user']['count_lodgement']); ?> Logements</span>
+                <span class="details_lodgement"><i class="fa-solid fa-users"></i> <?= htmlspecialchars($data['lodgement']['peoples']); ?> Voyageurs</span>
+                <span class="details_lodgement"><i class="fa-solid fa-euro-sign"></i> <?= htmlspecialchars($data['lodgement']['price']); ?> € / nuit</span>
+            </div> 
+        </div>
+        <div class="grid2">
+            <h2>Logement de <?= htmlspecialchars($data['user']['firstname']); ?></h2>
+            <p> <?= nl2br(htmlspecialchars($data['lodgement']['description'])); ?></p>
+        </div>
+        <div class="grid3">
+            <iframe
+                width="100%"
+                height="200"
+                frameborder="0"
+                scrolling="no"
+                marginheight="0"
+                marginwidth="0"
+                src="https://www.openstreetmap.org/export/embed.html?bbox=<?= (htmlspecialchars($data['longitude'])-0.02) . ',' . (htmlspecialchars($data['latitude'])-0.02) . ',' . (htmlspecialchars($data['longitude'])+0.02) . ',' . (htmlspecialchars($data['latitude'])+0.02); ?>&layer=mapnik"
+                >
+            </iframe>       
+        </div>
+       
+       
+        
     </section>
     <section class="lodgement_reservation">
         <h2>Réservation </h2>
         <?php if(isset($_SESSION['user'])){ ?>
-            <?php if(!$data['is_reserved']){ ?>
-                <form id="reservation_form">
-                    <input type="hidden" name="id_lodgement" value="<?= htmlspecialchars($data['lodgement']['id']) ?>"/>
-                        <label>Début
-                            <input type="date" placeholder="Début" name="start" />
-                        </label>
-                        <label>Fin
-                            <input type="date" placeholder="Fin" name="end" />
-                        </label>
-                        <button type='submit' onclick="submitReservation(event)">Envoyer la demande</button>
-                </form>
+            <?php if(htmlspecialchars($data['lodgement']['id_user']) ==$_SESSION['user']['id'] ){ ?>
+                <p> Ce logement vous appartient.</p>
             <?php }else{ ?>
-                <p>Votre demande a bien été prise en compte. Le propriétaire vous contactera dans les meilleurs délais.</p>
+                <?php if(!$data['is_reserved']){ ?>
+                    <form id="reservation_form">
+                        <input type="hidden" name="id_lodgement" value="<?= htmlspecialchars($data['lodgement']['id']) ?>"/>
+                            <label>Début
+                                <input type="date" placeholder="Début" name="start" />
+                            </label>
+                            <label>Fin
+                                <input type="date" placeholder="Fin" name="end" />
+                            </label>
+                            <button type='submit' onclick="submitReservation(event)">Envoyer la demande</button>
+                    </form>
+                <?php }else{ ?>
+                    <p>Votre demande a bien été prise en compte. Le propriétaire vous contactera dans les meilleurs délais.</p>
+                <?php } ?>
             <?php } ?>
         <?php }else{ ?>
-            <p>Pour réserver un logement : <a href="/loginpage" class="button">Connecte toi !</a></p>
+            <p>Pour réserver un logement : </p>
+            <p><a href="/loginpage" class="button">Connecte toi !</a></p>
+            
         <?php } ?>
     </section>
 

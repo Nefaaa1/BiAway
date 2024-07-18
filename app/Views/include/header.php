@@ -18,7 +18,7 @@
             <a href="/loginpage" class="menu-desktop">Connexion / Inscription</a>
             <?php }else{ ?>
             <?php if($_SESSION['user']['id_role'] == 1){ ?>
-            <a href="/backoffice" class="menu-desktop">Gestion du site</a>
+            <a href="/backoffice/dashboard" class="menu-desktop">Gestion du site</a>
             <?php }} ?>
             <?php if(isset($_SESSION['user'])){ ?>
             <a href="/moncompte" class="menu-desktop">Mon compte</a>
@@ -28,13 +28,13 @@
     </nav>
     <div class="menu-list">
         <ul>
-             <li><a href="/"><img src="public/assets/img/BiAway_Logo.png" alt="Logo BiAway"></a></li>
+             <li><a href="/"><img src="/public/assets/img/BiAway_Logo.png" alt="Logo BiAway"></a></li>
             <?php if(!isset($_SESSION['user'])){ ?>
             <li><a href="/loginpage">Connexion / Inscription</a></li>
             <?php }else{ ?>
             <li><a href="/moncompte">Mon compte</a></li>
             <?php if($_SESSION['user']['id_role'] == 1){ ?>
-            <li><a href="/backoffice">Gestion du site</a></li>
+            <li><a href="/backoffice/dashboard">Gestion du site</a></li>
             <?php }} ?>
             <?php if(isset($_SESSION['user'])){ ?>
             <li><a href="/deconnexion">Déconnexion</a></li>

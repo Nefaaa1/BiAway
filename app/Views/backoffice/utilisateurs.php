@@ -15,6 +15,7 @@
         <table>
             <thead>
                 <tr>
+                    <th>ID</th>
                     <th>Nom / Prénom</th>
                     <th>Mail</th>
                     <th>Rôle</th>
@@ -46,6 +47,7 @@
                             no_actif = 'class="disabled_tr"' 
                         }
                         html += `<tr data-id="${d.id}" ${no_actif}> 
+                                    <td data-nom='ID'>${d.id}</td>
                                     <td data-nom='Nom / Prénom'>${d.lastname} ${d.firstname}</td>
                                     <td data-nom='Mail'>${d.mail}</td>
                                     <td data-nom='Rôle'>${d.role_name}</td>

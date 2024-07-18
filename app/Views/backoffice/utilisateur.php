@@ -1,10 +1,16 @@
 <?php get_backheader(); ?>
 <main class="content_back">
+    <p id="reponse_form"></p>
     <form method="post" id="form_add">
         <a class="button back" href="/backoffice/utilisateurs"><i class="fa-solid fa-square-caret-left"></i> <span>Retour</span></a>
         <button onclick="submitSave(event)" class="save"><i class="fa-regular fa-floppy-disk"></i> <span><?= $data['button'] ?></span></button>
-        <?php if($data['user']['id'] !=""){  ?>
-        <button onclick="_delete(event)" class="delete" ><i class="fa-regular fa-trash-can"></i> <span>Supprimer</span></button>
+        <?php if($data['user']['id'] != 0){  ?>
+            <button onclick="_delete(event)" class="delete" ><i class="fa-regular fa-trash-can"></i> <span>Supprimer</span></button>
+            <?php if($data['user']['actif'] == 1){  ?>
+                <button onclick="_switch(event,0)" class="switch" ><i class="fa-solid fa-user-lock"></i></i> <span>Désactiver</span></button>
+            <?php }else{  ?>
+                <button onclick="_switch(event,1)" class="switch" ><i class="fa-solid fa-lock-open"></i></i> <span>Activer</span></button>
+            <?php }  ?>
         <?php }  ?>
         <h2><?= $data['h2'] ?></h2>
         <input type="hidden" name="id" value="<?= $data['user']['id'] ?>">       
@@ -73,8 +79,9 @@
         });
     }
     function _delete(event){
+        event.preventDefault()
         if(confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')){
-            event.preventDefault()
+            var alert =  document.getElementById('reponse_form');
             var form = document.getElementById("form_add");
             var formData = new FormData(form);
             fetch('/delete_user', 
@@ -82,8 +89,49 @@
                 method: "POST",
                 body : formData
             })
+            .then(response => response.json())
             .then(data => {
-                window.location.href = '/backoffice/utilisateurs';
+                if (data.status == 'success') {
+                    alert.classList.add('success');
+                    alert.textContent=data.message;
+                    setTimeout( () => {
+                        window.location.href = '/backoffice/utilisateurs';
+                        }, 1500);
+                }else{
+                    alert.classList.add('error');
+                    alert.textContent=data.message;
+                }
+            })
+            .catch(error => {
+                console.error("Erreur lors de la requête Fetch:", error);
+            });
+        }
+    }
+
+    function _switch(event, statut){
+        event.preventDefault()
+        if(confirm('Êtes-vous sûr de vouloir changer de statut cet utilisateur ?')){
+            var alert =  document.getElementById('reponse_form');
+            var formData = new FormData();
+            formData.append('switch', statut);
+            formData.append('id', document.querySelector('[name=id]').value);
+            fetch('/switch_user', 
+            {
+                method: "POST",
+                body : formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status == 'success') {
+                    alert.classList.add('success');
+                    alert.textContent=data.message;
+                    setTimeout( () => {
+                        window.location.href = '/backoffice/utilisateurs';
+                        }, 1500);
+                }else{
+                    alert.classList.add('error');
+                    alert.textContent=data.message;
+                }
             })
             .catch(error => {
                 console.error("Erreur lors de la requête Fetch:", error);

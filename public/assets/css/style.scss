@@ -4,13 +4,12 @@
 
 
 // GENERAL
+*{
+    box-sizing: border-box;
+}
 
 html {
     font-size: 62.5%;
-}
-
-*{
-    box-sizing: border-box;
 }
 
 body{
@@ -54,7 +53,7 @@ h1:not(.h1_back):after{
 //     @include input;
 // }
 
-input.error{
+input.error, select.error, textarea.error{
     border-bottom: red 2px solid !important;
 }
 
@@ -367,22 +366,30 @@ header.home-header{
             object-fit: cover;
         }
         figcaption{
-           
             position: absolute;
             bottom: 0;
             width: 100%;
             height: 40%;
-            padding: 0.5rem;
             color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
             @include glassmorphism-card;
+            div:first-child{
+                flex: 1;
+                overflow: hidden;
+                display: flex;
+                align-items: center;
+                padding: 0.5rem
+            }
             .price{
-                position: absolute;
-                bottom: 0;
-                right: 0;
                 @include glassmorphism-header-input;
                 border-radius: $border-radius 0 0 0;
                 padding: .5rem 1rem;
                 font-size: 1.3rem;
+                text-align: right;
+                width: fit-content;
+                align-self: flex-end;
             }
             p{
                 margin-top: 0.5rem;
@@ -399,17 +406,11 @@ header.home-header{
 }
 
 .lodgement_picture{
+    width: 100%;
     border-radius: $border-radius;
     overflow: hidden;
-    max-height: 25rem;
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    img{
-        max-width: 100%; 
-        max-height: 100%;
-        object-fit: contain; 
-    }
+    display: block;
+    margin: 0 auto;
 }
 
 .lodgement_description, .lodgement_reservation{
@@ -424,6 +425,38 @@ header.home-header{
         display: inline-block;
     }
 }
+
+.lodgement_description{
+    display: grid;   
+    grid-template-areas:
+    "grid1"
+    "grid2"
+    "grid3";
+    grid-template-columns: 1fr;
+    .grid1{
+        grid-area: grid1;
+        display: flex;
+        align-items: center;
+        img{
+            width: 100px;
+            border-radius: $border-radius;
+            overflow: hidden;
+            border: 2px solid $primary-color;
+        }
+        .all_details{
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+    }
+    .grid2{
+        grid-area: grid2;
+    }
+    .grid3{
+        grid-area: grid3;
+    }
+}
 .lodgement_reservation{
     p{
         font-style: italic;
@@ -436,6 +469,7 @@ header.home-header{
     font-size: 1.3rem;
     padding: 1rem;
     border-radius: $border-radius;
+    white-space: nowrap ;
     @include glassmorphism;
 }
 
@@ -464,9 +498,15 @@ header.home-header{
     color: #fff;
     padding: 1rem;
     border-radius: $border-radius;
+    form{
+        display: flex;
+        align-items: flex-end;
+        justify-content: flex-start;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
     label{
         display: inline-block ;
-        width: 50%;
     }
     input{
         @include input;
@@ -484,7 +524,7 @@ header.home-header{
         margin-bottom: 1rem;
     }
 }
-.lodgement_form{
+.lodgement_form, .changement_photo{
     border-radius: $border-radius;
     background-color: $secondary-color;
     padding: 1rem;
@@ -512,9 +552,10 @@ header.home-header{
     }
 }
 
-#reponse_form{
+#reponse_form, #reponse_contact{
     position: fixed;
     right: 0;
+    bottom:0;
     width: fit-content;
     padding: 1rem 2rem;
     border-radius: 1rem; 
@@ -523,6 +564,7 @@ header.home-header{
     transform: translateX(-50%);
     z-index: 2;
     opacity: 0;
+    text-align: center;
     &.error{
         background: #dd0000;
         animation: message 3s forwards;
@@ -531,6 +573,17 @@ header.home-header{
         background: #00d100;
         animation: message 3s forwards;
     }
+}
+
+.not_found{
+    background: $primary-color;
+    color: #fff;
+    font-weight: bold;
+    font-size: 3rem;
+    padding: 2rem;
+    border-radius: $border-radius;
+    text-align: center;
+    margin-bottom: 13rem;
 }
 
 @keyframes message {

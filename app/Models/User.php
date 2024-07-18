@@ -8,18 +8,18 @@ use Exception;
 class User extends Database {
 
     private $pdo;
-    public $id ="";
-    public $actif ="1";
-    public $id_role ="2";
-    public $firstname ="";
-    public $lastname ="";
-    public $mail ="";
-    public $phone ="";
-    public $password ="";
-    public $picture ="";
-    public $creation ="";
-    public $modification ="";
-    public $last_connexion ="";
+    public int $id = 0;
+    public int $actif =1;
+    public int $id_role =2;
+    public string $firstname ="";
+    public string $lastname ="";
+    public string $mail ="";
+    public string $phone ="";
+    public string $password ="";
+    public ?string $picture ="";
+    public ?string $creation ="";
+    public ?string $modification ="";
+    public ?string $last_connexion ="";
     
 
     public function __construct() {
@@ -48,7 +48,7 @@ class User extends Database {
         }
     }
 
-    public function _get($k, $v){
+    public function _get(string $k, $v){
         if (property_exists($this, $k)) {
             return $this->$k = $v;
         }else{
@@ -56,22 +56,24 @@ class User extends Database {
         }
     }
 
-    public function get($id){
+    public function get(int $id){
         if ($id != 0) {
             try{
                 $sql ='SELECT * FROM users WHERE id=?';
                 $stmt = $this->pdo->prepare($sql);
                 $stmt->execute(array($id));
-                $this->setData($stmt->fetch(PDO::FETCH_ASSOC));
+                $data =$stmt->fetch(PDO::FETCH_ASSOC);
+                if($data)
+                    $this->setData($data);
             }catch(PDOException $e){
                 throw new Exception("Erreur lors de la recupération de l'user ".$id." : " . $e->getMessage());
             }
         }else{
-            return 'L\'id est incorrect !';
+            throw new Exception("L'id est incorrect !");
         }
     }
 
-    public function getBy($k, $v){
+    public function getBy(string $k, $v): array | bool{
             try{
                 $sql ="SELECT id FROM users WHERE $k=?";
                 $stmt = $this->pdo->prepare($sql);
@@ -82,7 +84,7 @@ class User extends Database {
             }
     }
 
-    public function getByAdmin($k, $v){
+    public function getByAdmin(string $k, $v): array| bool{
         try{
             $sql ="SELECT id FROM users WHERE id_role=1 AND $k=?";
             $stmt = $this->pdo->prepare($sql);
@@ -93,7 +95,7 @@ class User extends Database {
         }
 }
 
-    public function save(){
+    public function save() :void{
         if($this->id == 0){
             $this->_insert();
         } else {
@@ -118,7 +120,7 @@ class User extends Database {
         }
     }
 
-    private function _insert(){
+    private function _insert():void{
         $req= array();
         $val= array();
         $this->creation= date('Y-m-d H:i:s');
@@ -142,12 +144,32 @@ class User extends Database {
         }
     }
 
-    public function delete(){
+    public function desactivate():void{
         $this->actif = 0;
         $this->save();
     }
 
-    public function verif_mail($mail){
+    public function activate():void{
+        $this->actif = 1;
+        $this->save();
+    }
+
+
+    public function delete():void{
+        if ($this->id != 0 && $this->id != "") {
+            try{
+                $sql ='DELETE FROM users WHERE id=?';
+                $stmt = $this->pdo->prepare($sql);
+                $stmt->execute(array($this->id));
+            }catch(PDOException $e){
+                throw new Exception("Erreur lors de la suppression de l'utilisateur ".$this->id." : " . $e->getMessage());
+            }
+        }else{
+            throw new Exception("Erreur lors de la suppression de l'utilisateur, l'id n'est pas valide");
+        }
+    }
+
+    public function verif_mail($mail) :bool{
         
         $sql ='SELECT id FROM users WHERE mail=:mail AND id !="'. $this->id.'"';
         try{
@@ -164,7 +186,7 @@ class User extends Database {
             return true;
     }
 
-    public function setData($data = array()){
+    public function setData($data = array()):void{
         foreach(array_keys(get_object_vars($this)) as $a){
             if ($a != "pdo"){
                 if(isset($data[$a])){
@@ -175,7 +197,7 @@ class User extends Database {
             } 
         }
     }
-    public function getData(){
+    public function getData():array{
         $data = array();
         foreach(array_keys(get_object_vars($this)) as $a){
             if ($a != "pdo"){
@@ -185,7 +207,7 @@ class User extends Database {
         return $data;
     }
 
-    public static function getAllUsers($pdo, $req = array()){
+    public static function getAllUsers(PDO $pdo, array $req = array()):array{
         $where = array();
         $val = array();
 

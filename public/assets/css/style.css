@@ -2,12 +2,12 @@
   font-family: "Figtree";
   src: url("../font/figtree/Figtree-Regular.ttf") format("truetype");
 }
-html {
-  font-size: 62.5%;
-}
-
 * {
   box-sizing: border-box;
+}
+
+html {
+  font-size: 62.5%;
 }
 
 body {
@@ -46,7 +46,7 @@ h1:not(.h1_back):after {
   bottom: -1rem;
 }
 
-input.error {
+input.error, select.error, textarea.error {
   border-bottom: red 2px solid !important;
 }
 
@@ -325,6 +325,8 @@ header.home-header {
 }
 .container table.liste thead {
   display: none;
+  border-bottom: 1px solid #ff6039;
+  color: #560000;
 }
 .container table.liste tr {
   display: block;
@@ -350,10 +352,33 @@ header.home-header {
   font-weight: bold;
 }
 .container table.liste tr:nth-child(even) {
-  background-color: #FAFAFF;
+  background-color: rgba(255, 96, 57, 0.1607843137);
 }
 .container table.liste .disabled_tr {
   opacity: 0.4;
+}
+.container table.liste .lien_logement {
+  font-size: 1.5rem;
+  color: #ff6039;
+  font-weight: bold;
+  text-decoration: underline;
+  padding: 0;
+}
+@media only screen and (min-width: 1024px) {
+  .container table.liste thead {
+    display: table-header-group;
+  }
+  .container table.liste td::before {
+    content: "";
+  }
+  .container table.liste tr {
+    display: table-row;
+  }
+  .container table.liste td {
+    display: table-cell;
+    text-align: center;
+    padding: 10px;
+  }
 }
 
 #message_inscription.success, #message_connexion.success {
@@ -439,18 +464,24 @@ header.home-header {
   bottom: 0;
   width: 100%;
   height: 40%;
-  padding: 0.5rem;
   color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   background: rgba(255, 255, 255, 0.1);
   -webkit-backdrop-filter: blur(10px);
           backdrop-filter: blur(10px);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   border-top: 1px solid rgba(255, 255, 255, 0.4);
 }
+.resultat_logement figure figcaption div:first-child {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+}
 .resultat_logement figure figcaption .price {
-  position: absolute;
-  bottom: 0;
-  right: 0;
   background: rgba(0, 0, 0, 0.33);
   -webkit-backdrop-filter: blur(10px);
           backdrop-filter: blur(10px);
@@ -461,6 +492,10 @@ header.home-header {
   border-radius: 1rem 0 0 0;
   padding: 0.5rem 1rem;
   font-size: 1.3rem;
+  text-align: right;
+  width: -moz-fit-content;
+  width: fit-content;
+  align-self: flex-end;
 }
 .resultat_logement figure figcaption p {
   margin-top: 0.5rem;
@@ -472,18 +507,11 @@ header.home-header {
 }
 
 .lodgement_picture {
+  width: 100%;
   border-radius: 1rem;
   overflow: hidden;
-  max-height: 25rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.lodgement_picture img {
-  max-width: 100%;
-  max-height: 100%;
-  -o-object-fit: contain;
-     object-fit: contain;
+  display: block;
+  margin: 0 auto;
 }
 
 .lodgement_description, .lodgement_reservation {
@@ -499,6 +527,35 @@ header.home-header {
   display: inline-block;
 }
 
+.lodgement_description {
+  display: grid;
+  grid-template-areas: "grid1" "grid2" "grid3";
+  grid-template-columns: 1fr;
+}
+.lodgement_description .grid1 {
+  grid-area: grid1;
+  display: flex;
+  align-items: center;
+}
+.lodgement_description .grid1 img {
+  width: 100px;
+  border-radius: 1rem;
+  overflow: hidden;
+  border: 2px solid #ff6039;
+}
+.lodgement_description .grid1 .all_details {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.lodgement_description .grid2 {
+  grid-area: grid2;
+}
+.lodgement_description .grid3 {
+  grid-area: grid3;
+}
+
 .lodgement_reservation p {
   font-style: italic;
 }
@@ -509,6 +566,7 @@ header.home-header {
   font-size: 1.3rem;
   padding: 1rem;
   border-radius: 1rem;
+  white-space: nowrap;
   background: rgba(255, 255, 255, 0.1);
   -webkit-backdrop-filter: blur(10px);
           backdrop-filter: blur(10px);
@@ -548,9 +606,15 @@ header.home-header {
   padding: 1rem;
   border-radius: 1rem;
 }
+.motdepassechange form {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
 .motdepassechange label {
   display: inline-block;
-  width: 50%;
 }
 .motdepassechange input {
   border-radius: 1rem;
@@ -575,20 +639,20 @@ header.home-header {
   margin-bottom: 1rem;
 }
 
-.lodgement_form {
+.lodgement_form, .changement_photo {
   border-radius: 1rem;
   background-color: #560000;
   padding: 1rem;
   color: #fff;
 }
-.lodgement_form h3 {
+.lodgement_form h3, .changement_photo h3 {
   display: inline-block;
 }
-.lodgement_form fieldset {
+.lodgement_form fieldset, .changement_photo fieldset {
   display: flex;
   flex-direction: column;
 }
-.lodgement_form input {
+.lodgement_form input, .changement_photo input {
   border-radius: 1rem;
   padding: 1rem;
   border: none;
@@ -599,16 +663,16 @@ header.home-header {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   color: #fff;
 }
-.lodgement_form input:focus-visible {
+.lodgement_form input:focus-visible, .changement_photo input:focus-visible {
   outline: none;
 }
-.lodgement_form input::-moz-placeholder {
+.lodgement_form input::-moz-placeholder, .changement_photo input::-moz-placeholder {
   z-index: 2;
 }
-.lodgement_form input::placeholder {
+.lodgement_form input::placeholder, .changement_photo input::placeholder {
   z-index: 2;
 }
-.lodgement_form textarea {
+.lodgement_form textarea, .changement_photo textarea {
   border-radius: 1rem;
   padding: 1rem;
   border: none;
@@ -620,13 +684,14 @@ header.home-header {
   color: #fff;
   resize: none;
 }
-.lodgement_form textarea:focus-visible {
+.lodgement_form textarea:focus-visible, .changement_photo textarea:focus-visible {
   outline: none;
 }
 
-#reponse_form {
+#reponse_form, #reponse_contact {
   position: fixed;
   right: 0;
+  bottom: 0;
   width: -moz-fit-content;
   width: fit-content;
   padding: 1rem 2rem;
@@ -636,14 +701,26 @@ header.home-header {
   transform: translateX(-50%);
   z-index: 2;
   opacity: 0;
+  text-align: center;
 }
-#reponse_form.error {
+#reponse_form.error, #reponse_contact.error {
   background: #dd0000;
   animation: message 3s forwards;
 }
-#reponse_form.success {
+#reponse_form.success, #reponse_contact.success {
   background: #00d100;
   animation: message 3s forwards;
+}
+
+.not_found {
+  background: #ff6039;
+  color: #fff;
+  font-weight: bold;
+  font-size: 3rem;
+  padding: 2rem;
+  border-radius: 1rem;
+  text-align: center;
+  margin-bottom: 13rem;
 }
 
 @keyframes message {
@@ -738,6 +815,8 @@ header.home-header {
 }
 .content_back table thead {
   display: none;
+  border-bottom: 1px solid #ff6039;
+  color: #560000;
 }
 .content_back table tr {
   display: block;
@@ -763,10 +842,33 @@ header.home-header {
   font-weight: bold;
 }
 .content_back table tr:nth-child(even) {
-  background-color: #FAFAFF;
+  background-color: rgba(255, 96, 57, 0.1607843137);
 }
 .content_back table .disabled_tr {
   opacity: 0.4;
+}
+.content_back table .lien_logement {
+  font-size: 1.5rem;
+  color: #ff6039;
+  font-weight: bold;
+  text-decoration: underline;
+  padding: 0;
+}
+@media only screen and (min-width: 1024px) {
+  .content_back table thead {
+    display: table-header-group;
+  }
+  .content_back table td::before {
+    content: "";
+  }
+  .content_back table tr {
+    display: table-row;
+  }
+  .content_back table td {
+    display: table-cell;
+    text-align: center;
+    padding: 10px;
+  }
 }
 .content_back form fieldset {
   width: 100%;
@@ -876,12 +978,15 @@ header.home-header {
   cursor: pointer;
 }
 #liste_resultat tr:hover {
-  background-color: #d0d0db;
+  background-color: rgba(255, 97, 57, 0.5882352941);
 }
 
 @media only screen and (min-width: 768px) and (max-width: 1023px) {
   .resultat_logement {
     grid-template-columns: repeat(3, 1fr);
+  }
+  .lodgement_picture {
+    width: 75%;
   }
 }
 @media only screen and (min-width: 1024px) {
@@ -915,10 +1020,6 @@ header.home-header {
     color: #fff;
     font-weight: bold;
     white-space: nowrap;
-  }
-  .header nav a:first-child {
-    width: 50%;
-    justify-content: flex-start;
   }
   .footer {
     max-width: 110rem;
@@ -956,20 +1057,6 @@ header.home-header {
     width: 80%;
     margin: 4rem auto;
   }
-  .content_back table thead {
-    display: table-header-group;
-  }
-  .content_back table td::before {
-    content: "";
-  }
-  .content_back table tr {
-    display: table-row;
-  }
-  .content_back table td {
-    display: table-cell;
-    text-align: center;
-    padding: 10px;
-  }
   .content_back #form_search {
     justify-content: flex-start;
   }
@@ -996,5 +1083,16 @@ header.home-header {
   }
   .resultat_logement {
     grid-template-columns: repeat(4, 1fr);
+  }
+  .lodgement_description {
+    grid-template-areas: "grid1 grid2" "grid3 grid2";
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 2rem;
+  }
+  .lodgement_description .grid1 {
+    margin-bottom: 2rem;
+  }
+  .lodgement_picture {
+    width: 50%;
   }
 }/*# sourceMappingURL=style.css.map */

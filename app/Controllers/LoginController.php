@@ -18,6 +18,7 @@ class LoginController {
                 $error[$o]= 'Information obligatoire !';
         }
         if(count($error)>0){
+            http_response_code(500);
             echo json_encode(['status' => 'error', 'key' => $error,  'message' => 'Informations obligatoires manquante !']);
             exit();
         }
@@ -26,10 +27,19 @@ class LoginController {
         $u=new User();
         if($u->verif_mail($_POST['mail'])){
             $error['mail'] = 'Le mail est déjà pris !';
+            http_response_code(500);
             echo json_encode(['status' => 'error', 'key' => $error, 'message' => 'Le mail est déjà pris !']);
             exit();
         }
+
+        //VERIFICATION PASSWORD
+        if (strlen($_POST['password']) < 8 || !preg_match('/[A-Za-z]/', $_POST['password']) || !preg_match('/[0-9]/', $_POST['password'])) {
+            http_response_code(500);
+            echo json_encode(['status' => 'error', 'message' => 'Votre mot de passe doit contenir au moins 8 caractère avec des chiffres et lettres !']);
+            exit();
+        }
         $_POST['password']= password_hash($_POST['password'],PASSWORD_BCRYPT);
+        
         $u->setData($_POST);
         try {
             // $u->save();
@@ -45,6 +55,7 @@ class LoginController {
             ];
             echo json_encode(['status' => 'success', 'message' => 'Inscription réussie !']);
           } catch (Exception $e) {
+            http_response_code(500);
             echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
           }
     }
@@ -58,12 +69,14 @@ class LoginController {
                 $error[$o]= 'Information obligatoire !';
         }
         if(count($error)>0){
+            http_response_code(500);
             echo json_encode(['status' => 'error', 'key' => $error,  'message' => 'Informations obligatoires manquante !']);
             exit();
         }
         $u=new User();
         $verif_id =$u->getBy('mail', $_POST['mail']);
         if(empty($verif_id['id'])){
+            http_response_code(500);
             echo json_encode(['status' => 'error', 'message' => 'Adresse e-mail ou mot de passe incorrect !']);
             exit();
         }
@@ -81,6 +94,7 @@ class LoginController {
             ];
             echo json_encode(['status' => 'success', 'message' => 'Connexion réussie !']);
         }else{
+            http_response_code(500);
             echo json_encode(['status' => 'error', 'message' => 'Adresse e-mail ou mot de passe incorrect !']);
         }
     }

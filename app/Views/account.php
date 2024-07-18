@@ -2,17 +2,25 @@
 <main class="container">
     <div id="reponse_form"></div>
     <h1 class="">Mon compte</h1>
+    <section class="changement_photo">
+        <h2 class="">Changement de photo</h2>
+        <form method="POST">
+            <fieldset>
+                <input type="file" name="picture" accept="image/*">    
+            </fieldset>
+            <button onclick="submitPicture(event)" >Changer ma photo de profil</button>
+        </form>
+    </section>
     <section class="motdepassechange">
         <h2 class="">Changement de mot de passe</h2>
         <form method="POST">
-            <fieldset>
-                <label for="old_password">Mot de passe actuel :</label>
-                <input type="password" name="old_password" id="old_password">    
-            </fieldset>
-            <fieldset>
-                <label for="password">Nouveau mot de passe :</label>
-                <input type="password" name="password" id="password">
-            </fieldset>
+           
+                <label for="old_password">Mot de passe actuel :
+                <input type="password" name="old_password" id="old_password">   </label> 
+    
+                <label for="password">Nouveau mot de passe :
+                <input type="password" name="password" id="password"></label>
+     
             
             <button onclick="submitPassword(event)" >Changer mon mot de passe</button>
         </form>
@@ -56,6 +64,7 @@
             <table class="liste">
             <thead>
                 <tr>
+                    <th>Logement</th>
                     <th>Date de la demande</th>
                     <th>Début</th>
                     <th>Fin</th>
@@ -64,6 +73,7 @@
             <tbody >
                 <?php foreach ($data['reservations'] as $k=>$v){ ?>
                 <tr>
+                    <td data-nom='Logement'><a class="lien_logement" target='_blank' href="/logement/<?= htmlspecialchars($v['id_lodgement']) ?>"><?= htmlspecialchars($v['lodgement_name']) ?></a></td>
                     <td data-nom='Date de la demande'><?= (new DateTime(htmlspecialchars($v['creation'])))->format('d/m/y') ?></td>
                     <td data-nom='Début'><?= (new DateTime(htmlspecialchars($v['start'])))->format('d/m/y') ?></td>
                     <td data-nom='Fin'><?= (new DateTime(htmlspecialchars($v['end'])))->format('d/m/y') ?></td>
@@ -112,6 +122,50 @@
                     const value = data.key[key]
                     document.querySelector(".motdepassechange form input[name="+ key +"]").title = value;
                     document.querySelector(".motdepassechange form input[name="+ key +"]").classList.add('error');
+                }
+                
+                message.innerHTML = data.message;
+                message.classList.add('error');
+            }
+        })
+        .catch(error => {
+            console.error("Erreur lors de la requête Fetch:", error);
+        });
+    }
+
+    function submitPicture(event){
+        event.preventDefault()
+        var input_form= document.querySelectorAll(".changement_photo form input");
+        var form = document.querySelector('.changement_photo form');
+        var formData = new FormData(form);
+        var message = document.getElementById('reponse_form');
+        input_form.forEach(input => {
+            input.title = '';
+            input.classList.remove('error');
+        });
+        message.className = '';
+        fetch('/moncompte/change_picture', 
+        {
+            method: "POST",
+            body : formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status == 'success') {
+                input_form.forEach(input => {
+                    input.title = '';
+                    input.classList.remove('error');
+                });
+                message.innerHTML='Photo modifier avec succés !';
+                message.classList.add('success');
+                setTimeout( () => {
+                     window.location.href = '/moncompte';
+                    }, 1500);
+            }else {
+                for (const key in data.key) {
+                    const value = data.key[key]
+                    document.querySelector(".changement_photo form input[name="+ key +"]").title = value;
+                    document.querySelector(".changement_photo form input[name="+ key +"]").classList.add('error');
                 }
                 
                 message.innerHTML = data.message;

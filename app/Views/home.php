@@ -31,7 +31,7 @@
                         html += '<figure data-id="'+ d.id+'">';
                         html += '<img src="/public/assets/img/lodgements/'+img+'" alt="photo du logement">';
                         html += '<figcaption>';
-                        html += '<p>'+ d.title+'</p>';
+                        html += '<div>'+ d.title+'</div>';
                         html += '<div class="price">'+ d.price+'€/nuit</div>';
                         html += '</figcaption>';
                         html += '</figure>';

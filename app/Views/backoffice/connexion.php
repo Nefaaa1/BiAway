@@ -1,5 +1,6 @@
 <?php get_backheader(); ?>
     <main class='back_container'>
+        <p id="reponse_form"></p>
         <section class="backoffice_connexion">
             <a href="/"><img src="public/assets/img/BiAway_Logo.png" alt="Logo BiAway"></a>
             <p>Connexion à votre backoffice</p>
@@ -11,7 +12,6 @@
                     <input type="password" placeholder="Mot de passe" name="password">
                 </fieldset>
                 <button onclick="submitConnexion(event)">Connexion</button>
-                <p id="message_connexion"></p>
             </form>  
         </section>
     </main>
@@ -22,7 +22,7 @@
             event.preventDefault()
             var form = document.getElementById("back_connexion");
             var formData = new FormData(form);
-            var alert =  document.getElementById('message_connexion');
+            var alert =  document.getElementById('reponse_form');
             alert.className="";
             input_connexion.forEach(input => {
                 input.title = '';
@@ -42,13 +42,13 @@
                         input.title = '';
                         input.classList.remove('error');
                     });
-                    alert.classList.add(data.status);
+                    alert.classList.add('success');
                     alert.textContent=data.message;
                     setTimeout( () => {
                         window.location.href = '/backoffice/dashboard';
                     }, 1500);
                 }else {
-                    alert.classList.add(data.status);
+                    alert.classList.add('error');
                     alert.textContent=data.message;
                     for (const key in data.key) {
                         const value = data.key[key];

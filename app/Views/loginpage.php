@@ -1,5 +1,6 @@
 <?php get_header(); ?>
 <main class="container">
+    <p id="reponse_form"></p>
     <section>
         <form method="post"  id="form_inscription">
             <fieldset>
@@ -20,7 +21,7 @@
                <input type="password" placeholder="Mot de passe" name="password">
                <button onclick="submitConnexion(event)">Connexion</button>
             </fieldset>
-            <p id="message_connexion"></p>
+            <!-- <p id="message_connexion"></p> -->
             <p>Tu n'as pas de compte ? <span class="toggleForm">Inscrit toi !</span></p>
         </form>  
     </section>
@@ -35,7 +36,7 @@
         event.preventDefault()
         var form = document.getElementById("form_inscription");
         var formData = new FormData(form);
-        var alert =  document.getElementById('message_inscription');
+        var alert = document.getElementById('reponse_form');
         alert.className="";
         input_inscription.forEach(input => {
             input.title = '';
@@ -54,13 +55,13 @@
                     input.title = '';
                     input.classList.remove('error');
                 });
-                alert.classList.add(data.status);
+                alert.classList.add('success');
                 alert.textContent=data.message;
                 setTimeout( () => {
                      window.location.href = '/';
                     }, 1500);
             }else {
-                alert.classList.add(data.status);
+                alert.classList.add('error');
                 alert.textContent=data.message;
                 for (const key in data.key) {
                     const value = data.key[key];
@@ -79,7 +80,7 @@
         event.preventDefault()
         var form = document.getElementById("form_connexion");
         var formData = new FormData(form);
-        var alert =  document.getElementById('message_connexion');
+        var alert =  document.getElementById('reponse_form');
         alert.className="";
         input_connexion.forEach(input => {
             input.title = '';
@@ -99,13 +100,13 @@
                     input.title = '';
                     input.classList.remove('error');
                 });
-                alert.classList.add(data.status);
+                alert.classList.add('success');
                 alert.textContent=data.message;
                 setTimeout( () => {
                     window.location.href = '/';
                 }, 1500);
             }else {
-                alert.classList.add(data.status);
+                alert.classList.add('error');
                 alert.textContent=data.message;
                 for (const key in data.key) {
                     const value = data.key[key];

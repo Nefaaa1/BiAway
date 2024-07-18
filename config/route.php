@@ -12,6 +12,9 @@ $routes = FastRoute\simpleDispatcher(function (RouteCollector $r) {
     $r->addRoute('POST', '/search_lodgement', 'HomeController@recherche');
     $r->addRoute('GET', '/logement/{id:\d+}', 'LodgementController@index');
     $r->addRoute('POST', '/logement/reservation', 'LodgementController@reservation');
+    $r->addRoute('POST', '/save_lodgement', 'LodgementController@save');
+    $r->addRoute('POST', '/delete_lodgement', 'LodgementController@delete');
+    $r->addRoute('POST', '/switch_lodgement', 'Backoffice\LodgementsController@switch');
     //MON COMPTE
     $r->addRoute('GET', '/moncompte', 'AccountController@index');
     $r->addGroup('/moncompte', function(RouteCollector $r) {
@@ -19,26 +22,38 @@ $routes = FastRoute\simpleDispatcher(function (RouteCollector $r) {
         $r->addRoute('GET', '/logement/modifier/{id:\d+}', 'AccountController@modifier_logement');
         $r->addRoute('POST', '/change_password', 'AccountController@change_password');
         $r->addRoute('GET', '/logement/reservation/{id:\d+}', 'AccountController@reservation');
+        $r->addRoute('POST', '/change_picture', 'AccountController@change_picture');
     });
     //BACKOFFICE
     $r->addRoute('GET', '/backoffice', 'BackOfficeController@index');
     $r->addRoute('POST', '/connexionback', 'BackOfficeController@connexion');
     $r->addGroup('/backoffice', function(RouteCollector $r) {
         $r->addRoute('GET', '/dashboard', 'BackOfficeController@dashboard');
-        $r->addRoute('GET', '/deconnexion', 'BackOfficeController@deconnexion');
         $r->addRoute('GET', '/utilisateurs', 'Backoffice\UtilisateursController@listes');
         $r->addRoute('GET', '/utilisateur', 'Backoffice\UtilisateursController@ajouter');
         $r->addRoute('GET', '/utilisateur/{id:\d+}', 'Backoffice\UtilisateursController@voir');
         $r->addRoute('GET', '/logements', 'Backoffice\LodgementsController@listes');
         $r->addRoute('GET', '/logement', 'Backoffice\LodgementsController@ajouter');
+        $r->addRoute('POST', '/search_lodgement', 'Backoffice\LodgementsController@recherche');
         $r->addRoute('GET', '/logement/{id:\d+}', 'Backoffice\LodgementsController@voir');
+        $r->addRoute('POST', '/switch_lodgement', 'Backoffice\LodgementsController@switch');
+        $r->addRoute('GET', '/reservations', 'Backoffice\ReservationsController@listes');
+        $r->addRoute('GET', '/reservation', 'Backoffice\ReservationsController@ajouter');
+        $r->addRoute('GET', '/reservation/{id:\d+}', 'Backoffice\ReservationsController@voir');
     });
+    //UTILISATEUR
     $r->addRoute('POST', '/search_user', 'Backoffice\UtilisateursController@recherche');
     $r->addRoute('POST', '/save_user', 'Backoffice\UtilisateursController@save');
     $r->addRoute('POST', '/delete_user', 'Backoffice\UtilisateursController@delete');
+    $r->addRoute('POST', '/switch_user', 'Backoffice\UtilisateursController@switch');
 
-    $r->addRoute('POST', '/save_lodgement', 'LodgementController@save');
-    $r->addRoute('POST', '/delete_lodgement', 'LodgementController@delete');
+    //RESERVATION
+    $r->addRoute('POST', '/search_reservation', 'Backoffice\ReservationsController@recherche');
+    $r->addRoute('POST', '/save_reservation', 'Backoffice\ReservationsController@save');
+    $r->addRoute('POST', '/delete_reservation', 'Backoffice\ReservationsController@delete');
+
+
+    $r->addRoute('POST', '/contact/send', 'HomeController@send_contact');
 });
 
 

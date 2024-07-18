@@ -1,7 +1,7 @@
 <?php get_header(); ?>
 <main class="container">
+    <div id="reponse_form"></div>
     <section class="lodgement_form">
-
         <form method="post" id="form_add">
             <input type="hidden" name="id_user" value="<?= $_SESSION['user']['id'] ?>">
             <input type="hidden" name="id" value="<?= $data['lodgement']['id'] ?>">
@@ -30,8 +30,8 @@
                 <textarea name="description" id="description" cols="30" rows="10"><?= $data['lodgement']['description'] ?></textarea>
             </fieldset>
             <button onclick="submitSave(event)" type="submit"><?= $data['button'] ?></button>
-            <?php if ( $data['lodgement']['id'] != "") { ?>
-            <button onclick="_delete(event)" class="delete" ><i class="fa-regular fa-trash-can"></i></button>
+            <?php if ( $data['lodgement']['id'] != 0) { ?>
+                <button onclick="_delete(event)" class="delete" ><i class="fa-regular fa-trash-can"></i></button>
             <?php } ?>
         </form>
     </section>
@@ -42,6 +42,7 @@
     var input_add= document.querySelectorAll("#form_add input");
     function submitSave(event){
         event.preventDefault()
+        var alert =  document.getElementById('reponse_form');
         var form = document.getElementById("form_add");
         var formData = new FormData(form);
         input_add.forEach(input => {
@@ -60,11 +61,16 @@
                 input_add.forEach(input => {
                     input.title = '';
                     input.classList.remove('error');
+                    
                 });
+                alert.classList.add('success');
+                alert.textContent=data.message;
                 setTimeout( () => {
                      window.location.href = '/moncompte';
-                    }, 500);
+                    }, 1500);
             }else {
+                alert.classList.add('error');
+                alert.textContent=data.message;
                 for (const key in data.key) {
                     const value = data.key[key];
                     console.log("#form_add input[name="+ key +"]")
@@ -76,5 +82,34 @@
         .catch(error => {
             console.error("Erreur lors de la requête Fetch:", error);
         });
+    }
+    function _delete(event){
+        event.preventDefault()
+        if(confirm('Êtes-vous sûr de vouloir supprimer ce logement ?')){
+            var alert =  document.getElementById('reponse_form');
+            var form = document.getElementById("form_add");
+            var formData = new FormData(form);
+            fetch('/delete_lodgement', 
+            {
+                method: "POST",
+                body : formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status == 'success') {
+                    alert.classList.add('success');
+                    alert.textContent=data.message;
+                    setTimeout( () => {
+                        window.location.href = '/moncompte';
+                        }, 1500);
+                }else{
+                    alert.classList.add('error');
+                    alert.textContent=data.message;
+                }
+            })
+            .catch(error => {
+                console.error("Erreur lors de la requête Fetch:", error);
+            });
+        }
     }
 </script>

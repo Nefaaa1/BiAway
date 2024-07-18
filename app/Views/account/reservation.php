@@ -2,7 +2,7 @@
 <main class="container">
     <h1><?= htmlspecialchars($data['lodgement']['title']) ?></h1>
     <section>
-        <h2>Liste de demande</h2>
+        <h2>Mes réservations</h2>
         <?php if(count($data['reservation']) >0){ ?>
         <table class="liste">
             <thead>

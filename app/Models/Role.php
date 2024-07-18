@@ -8,8 +8,8 @@ use Exception;
 class Role extends Database {
 
     private $pdo;
-    public $id ="";
-    public $name ="";
+    public int $id =0;
+    public string $name ="";
     public function __construct() {
         $this->pdo = parent::getInstance();
     }
@@ -26,7 +26,7 @@ class Role extends Database {
         }
     }
 
-    public function _get($k, $v){
+    public function _get(string $k, $v){
         if (property_exists($this, $k)) {
             return $this->$k = $v;
         }else{
@@ -34,7 +34,7 @@ class Role extends Database {
         }
     }
 
-    public function get($id){
+    public function get(int $id) :void{
         if ($id != 0) {
             try{
                 $sql ='SELECT * FROM roles WHERE id=?';
@@ -46,23 +46,11 @@ class Role extends Database {
                 throw new Exception("Erreur lors de la recupération de l'user ".$id." : " . $e->getMessage());
             }
         }else{
-            return 'L\'id est incorrect !';
+            throw new Exception("L'id est incorrect !");
         }
     }
 
-    public function getBy($k, $v){
-            try{
-                $sql ="SELECT id FROM roles WHERE $k=?";
-                $stmt = $this->pdo->prepare($sql);
-                $stmt->bindParam(1, $v, PDO::PARAM_STR);
-                $stmt->execute();
-                return $stmt->fetch(PDO::FETCH_ASSOC);
-            }catch(PDOException $e){
-                throw new Exception("Aucun utilisateur trouvé :" . $e->getMessage());
-            }
-    }
-
-    public function save(){
+    public function save() :void{
         if($this->id == 0){
             $this->_insert();
         } else {
@@ -86,7 +74,7 @@ class Role extends Database {
         }
     }
 
-    private function _insert(){
+    private function _insert() :void{
         $req= array();
         $val= array();
         foreach(array_keys(get_object_vars($this)) as $k){
@@ -108,7 +96,7 @@ class Role extends Database {
         }
     }
 
-    public function setData($data = array()){
+    public function setData($data = array()) :void{
         foreach(array_keys(get_object_vars($this)) as $a){
             if ($a != "pdo"){
                 if(isset($data[$a])){
@@ -121,7 +109,7 @@ class Role extends Database {
         
     }
 
-    public static function getAllRoles($pdo){
+    public static function getAllRoles(PDO $pdo) :array{
         $sql ='SELECT roles.*
                 FROM roles';
 

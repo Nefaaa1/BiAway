@@ -6,7 +6,7 @@ use Exception;
 
 abstract class Database {
 
-private static $instance;
+    private static $instance;
 
     private function __construct() {
     }

@@ -16,17 +16,28 @@ class LodgementController {
         $data['user']=array(
             'firstname' => $user->firstname,
             'lastname' => $user->lastname,
-            'count_lodgement'=> count($lodgements)
+            'count_lodgement'=> count($lodgements),
+            'picture' =>$user->picture
          );
         $data['lodgement'] = $lodgement->getData();
 
         //recupération de la longitude et latitude pour l'affichage de la map 
         $url = "https://api-adresse.data.gouv.fr/search/?q=".urlencode($data['lodgement']['city'])."&type=municipality&limit=1";
-        $response = file_get_contents($url);
-        $response = json_decode($response, true);
-        $data['latitude'] = $response['features'][0]['geometry']['coordinates'][1];
-        $data['longitude'] = $response['features'][0]['geometry']['coordinates'][0];    
-        
+        $ch = curl_init(); 
+        curl_setopt($ch, CURLOPT_URL, $url); 
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
+        curl_setopt($ch, CURLOPT_TIMEOUT, 30); 
+        $response = curl_exec($ch);
+        curl_close($ch);
+        if($response){
+            $response = json_decode($response, true);
+            $data['latitude'] = $response['features'][0]['geometry']['coordinates'][1];
+            $data['longitude'] = $response['features'][0]['geometry']['coordinates'][0];   
+        }else{
+            $data['latitude'] = "";
+            $data['longitude'] = "";
+        }
+         
         //vérification si reserver
         $data['is_reserved'] =false;
         if (isset($_SESSION['user'])){
@@ -46,6 +57,7 @@ class LodgementController {
                 $error[$o]= 'Information obligatoire !';
         }
         if(count($error)>0){
+            http_response_code(500);
             echo json_encode(['status' => 'error', 'key' => $error,  'message' => 'Informations obligatoires manquante !']);
             exit();
         }
@@ -58,13 +70,19 @@ class LodgementController {
                 $name_picture = 'lodgement_'.uniqid().'.'.$extension_upload;
                 if (in_array($extension_upload, $extensions_autorisees)){
                     move_uploaded_file($_FILES['picture']['tmp_name'], 'public/assets/img/lodgements/'.$name_picture );
-                }
-                $_POST['picture']= $name_picture;
+                    $_POST['picture']= $name_picture;
+                }else{
+                    echo json_encode(['status' => 'error', 'message' =>'L\'image n\'est pas dans le bon format !']);
+                    exit();
+                }               
+            }else{
+                echo json_encode(['status' => 'error', 'message' =>'Image trop lourde !']);
+                exit();
             }
         }
 
         $u=new Lodgement();
-        if($_POST['id'] !=''){
+        if($_POST['id'] != 0){
             $u->get($_POST['id']);
         }
         $u->setData($_POST);
@@ -73,6 +91,7 @@ class LodgementController {
             echo json_encode(['status' => 'success', 'message' => 'Enregistrement réussie !']);
             exit();
         } catch (Exception $e) {
+            http_response_code(500);
             echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
             exit();
         }
@@ -84,6 +103,7 @@ class LodgementController {
        
         if($_SESSION['user']['id_role'] != 1){
             if($_SESSION['user']['id'] != $u->id_user){
+                http_response_code(500);
                 echo json_encode(['status' => 'error', 'message' => 'Suppression impossible !']);
                 exit();
             }
@@ -94,10 +114,12 @@ class LodgementController {
             if (file_exists($imagePath)) {
                 if (unlink($imagePath)) {} 
                 else {
+                    http_response_code(500);
                     echo json_encode(['status' => 'error', 'message' => 'Une erreur est survenu pendant la suppression']);
                     exit();
                 }
             } else {
+                http_response_code(500);
                 echo json_encode(['status' => 'error', 'message' => 'Une erreur est survenu pendant la suppression']);
                 exit();
             }
@@ -108,6 +130,7 @@ class LodgementController {
             echo json_encode(['status' => 'success', 'message' => 'Suppression réussie !']);
             exit();
         } catch (Exception $e) {
+            http_response_code(500);
             echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
             exit();
         }
@@ -122,6 +145,7 @@ class LodgementController {
                 $error[$o]= 'Information obligatoire !';
         }
         if(count($error)>0){
+            http_response_code(500);
             echo json_encode(['status' => 'error', 'key' => $error,  'message' => 'Informations obligatoires manquante !']);
             exit();
         }
@@ -133,6 +157,7 @@ class LodgementController {
             echo json_encode(['status' => 'success', 'message' => 'Réservation envoyée !']);
             exit();
         } catch (Exception $e) {
+            http_response_code(500);
             echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
             exit();
         }

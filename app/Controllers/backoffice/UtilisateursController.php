@@ -5,7 +5,7 @@ use App\Models\Role;
 use App\Models\Database;
 use Exception;
 
-if($_SESSION['admin']['id_role'] != 1){
+if($_SESSION['user']['id_role'] != 1){
     header("Location: /backoffice"); 
     exit();
 }
@@ -44,17 +44,19 @@ class UtilisateursController {
                 $error[$o]= 'Information obligatoire !';
         }
         if(count($error)>0){
+            http_response_code(500);
             echo json_encode(['status' => 'error', 'key' => $error,  'message' => 'Informations obligatoires manquante !']);
             exit();
         }
 
         //VERIFICATION MAIL A FAIRE
         $u=new User();
-        if($_POST['id'] !=''){
+        if($_POST['id'] !=0){
             $u->get($_POST['id']);
         }
         if($u->verif_mail($_POST['mail'])){
             $error['mail'] = 'Le mail est déjà pris !';
+            http_response_code(500);
             echo json_encode(['status' => 'error', 'key' => $error, 'message' => 'Le mail est déjà pris !']);
             exit();
         }
@@ -64,17 +66,41 @@ class UtilisateursController {
             $u->save();
             echo json_encode(['status' => 'success', 'message' => 'Enregistrement réussie !']);
           } catch (Exception $e) {
+            http_response_code(500);
             echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
           }
     }
 
     public function delete() {
         $u=new User();
-        if($_POST['id'] !=''){
+        if($_POST['id'] !=0){
             $u->get($_POST['id']);
         }
-        $u->delete();
-        http_response_code(200);
+        try {
+            $u->delete();
+            echo json_encode(['status' => 'success', 'message' => 'Suppresion réussie !']);
+          } catch (Exception $e) {
+            http_response_code(500);
+            echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
+        }
+    }
+
+    public function switch() {
+        $u=new User();
+        if($_POST['id'] !=0){
+            $u->get($_POST['id']);
+        }
+        try {
+            if($_POST['switch'] == 1){
+                $u->activate();
+            }else{
+                $u->desactivate();
+            }
+            echo json_encode(['status' => 'success', 'message' => 'Changement de statut réussie !']);
+          } catch (Exception $e) {
+            http_response_code(500);
+            echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
+        }
     }
 
     public function recherche() {

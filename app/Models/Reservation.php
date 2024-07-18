@@ -9,12 +9,12 @@ use PDOException;
 class Reservation extends Database {
 
     private $pdo;
-    public $id ="";
-    public $id_user ="";
-    public $id_lodgement ="";
-    public $creation ="";
-    public $start ="";
-    public $end ="";
+    public int $id =0;
+    public int $id_user =0;
+    public int $id_lodgement =0;
+    public ?string $creation ="";
+    public ?string $start ="";
+    public ?string $end ="";
     
 
     public function __construct() {
@@ -37,7 +37,7 @@ class Reservation extends Database {
         }
     }
 
-    public function _get($k, $v){
+    public function _get(string $k, $v){
         if (property_exists($this, $k)) {
             return $this->$k = $v;
         }else{
@@ -45,35 +45,24 @@ class Reservation extends Database {
         }
     }
 
-    public function get($id){
+    public function get(int $id): void{
         if ($id != 0) {
             try{
                 $sql ='SELECT * FROM reservation WHERE id=?';
                 $stmt = $this->pdo->prepare($sql);
-                $stmt->bindParam(1, $id, PDO::PARAM_INT);
-                $stmt->execute();
-                $this->setData($stmt->fetch(PDO::FETCH_ASSOC));
+                $stmt->execute(array($id));
+                $data =$stmt->fetch(PDO::FETCH_ASSOC);
+                if($data)
+                    $this->setData($data);
             }catch(PDOException $e){
                 throw new Exception("Erreur lors de la recupération de la reservation ".$id." : " . $e->getMessage());
             }
         }else{
-            return 'L\'id est incorrect !';
+            throw new Exception("L'id est incorrect !");
         }
     }
 
-    public function getBy($k, $v){
-            try{
-                $sql ="SELECT id FROM reservation WHERE $k=?";
-                $stmt = $this->pdo->prepare($sql);
-                $stmt->bindParam(1, $v, PDO::PARAM_STR);
-                $stmt->execute();
-                return $stmt->fetch(PDO::FETCH_ASSOC);
-            }catch(PDOException $e){
-                throw new Exception("Aucune reservation trouvé :" . $e->getMessage());
-            }
-    }
-
-    public function save(){
+    public function save() :void{
         if($this->id == 0){
             $this->_insert();
         } else {
@@ -97,7 +86,7 @@ class Reservation extends Database {
         }
     }
 
-    private function _insert(){
+    private function _insert():void{
         $req= array();
         $val= array();
         $this->creation= date('Y-m-d H:i:s');
@@ -120,7 +109,21 @@ class Reservation extends Database {
         }
     }
 
-    public function setData($data = array()){
+    public function delete():void{
+        if ($this->id != 0 && $this->id != "") {
+            try{
+                $sql ='DELETE FROM reservation WHERE id=?';
+                $stmt = $this->pdo->prepare($sql);
+                $stmt->execute(array($this->id));
+            }catch(PDOException $e){
+                throw new Exception("Erreur lors de la suppression de la reservation ".$this->id." : " . $e->getMessage());
+            }
+        }else{
+            throw new Exception("Erreur lors de la suppression de la reservation, l'id n'est pas valide");
+        }
+    }
+
+    public function setData(array $data = array()): void{
         foreach(array_keys(get_object_vars($this)) as $a){
             if ($a != "pdo"){
                 if(isset($data[$a])){
@@ -131,7 +134,7 @@ class Reservation extends Database {
             } 
         }
     }
-    public function getData(){
+    public function getData():array{
         $data = array();
         foreach(array_keys(get_object_vars($this)) as $a){
             if ($a != "pdo"){
@@ -141,7 +144,7 @@ class Reservation extends Database {
         return $data;
     }
 
-    public static function getAllreservation($pdo, $req = array()){
+    public static function getAllreservation(PDO $pdo,array $req = array()):array{
         $where = array();
         $val = array();
 
@@ -158,9 +161,10 @@ class Reservation extends Database {
         } 
 
 
-        $sql ='SELECT reservation.*, users.lastname,users.firstname, users.phone, users.mail
+        $sql ='SELECT reservation.*, users.lastname,users.firstname, users.phone, users.mail, lodgements.title AS lodgement_name, lodgements.city, lodgements.price
                 FROM reservation
                 INNER JOIN users ON reservation.id_user = users.id
+                INNER JOIN lodgements ON reservation.id_lodgement = lodgements.id
                 WHERE 1 
                 '. implode(' ',  $where);
 
@@ -174,7 +178,7 @@ class Reservation extends Database {
         }
     }
 
-    public static function IsReserved($pdo, $user_id, $lodgement_id){
+    public static function IsReserved(PDO $pdo, int $user_id, int $lodgement_id): bool{
         $sql ='SELECT *
                 FROM reservation
                 WHERE id_user=? AND id_lodgement=?';

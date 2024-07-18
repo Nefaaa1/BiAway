@@ -52,6 +52,8 @@
   width: 100%;
   thead{
       display: none;
+      border-bottom: 1px solid $primary-color;
+      color: $secondary-color;
   }
   tr{
       display: block;
@@ -77,9 +79,34 @@
       font-weight: bold;
   }
   tr:nth-child(even) {
-      background-color: #FAFAFF; 
+      background-color: #ff603929; 
   }
   .disabled_tr{
       opacity: 0.4;
+  }
+  .lien_logement{
+    font-size: 1.5rem;
+    color: $primary-color;
+    font-weight: bold;
+    text-decoration: underline;
+    padding: 0;
+  }
+
+  @media only screen and (min-width: 1024px) {
+    thead{
+      display: table-header-group;
+    }
+    td::before{
+        content:"";
+    }
+    tr{
+        display: table-row;
+      
+    }
+    td{
+        display: table-cell;
+        text-align: center;
+        padding: 10px;
+    }
   }
 }

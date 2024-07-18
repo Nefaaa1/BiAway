@@ -1,17 +1,17 @@
 <?php get_backheader(); ?>
 <main class="content_back">
     <form id='form_search'>
-        <input type="text" name="recherche" placeholder="Titre | Ville">
+        <input type="text" name="recherche" placeholder="Nom">
     </form>
-    <h2>Listes de logements</h2>
-    <a href="/backoffice/logement" class='button'>Ajouter un logement</a>
+    <h2>Listes des réservations</h2>
+    <a href="/backoffice/reservation" class='button'>Ajouter une réservation</a>
     <section>
         <table>
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Titre</th>
-                    <th>Nombre de place</th>
+                    <th>Nom / Prénom</th>
+                    <th>Date</th>
                     <th>Prix</th>
                     <th>Ville</th>
                 </tr>
@@ -29,7 +29,8 @@
                 var resultat = document.getElementById('liste_resultat');
                 var form = document.getElementById("form_search");
                 var formData = new FormData(form);
-                fetch('/backoffice/search_lodgement', {
+               
+                fetch('/search_reservation', {
                     method: "POST",
                     body : formData
                 })
@@ -37,14 +38,10 @@
                 .then(data => {
                     var html ='';
                     data.forEach(d => {
-                        var no_actif= "";
-                        if(d.actif == 0){
-                            no_actif = 'class="disabled_tr"' 
-                        }
-                        html += `<tr data-id="${d.id}" ${no_actif}> 
+                        html += `<tr data-id="${d.id}">
                                     <td data-nom='ID'>${d.id}</td>
-                                    <td data-nom='Titre'>${d.title}</td>
-                                    <td data-nom='Nombre de place'>${d.peoples}</td>
+                                    <td data-nom='Nom / Prénom'>${d.lastname} ${d.firstname}</td>
+                                    <td data-nom='Date'>${new Date(d.start).toLocaleDateString('fr-CA').split('-').reverse().join('/')} -> ${new Date(d.end).toLocaleDateString('fr-CA').split('-').reverse().join('/')}</td>
                                     <td data-nom='Prix'>${d.price}</td>
                                     <td data-nom='Ville'>${d.city}</td>
                                 </tr>`;
@@ -54,7 +51,7 @@
                     resultats.forEach(result => {
                         result.addEventListener('click',function(e){
                             let id= this.getAttribute('data-id');
-                            window.location.href = `/backoffice/logement/${id}`;
+                            window.location.href = `/backoffice/reservation/${id}`;
                         });
                     });
                 })

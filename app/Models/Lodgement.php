@@ -8,17 +8,17 @@ use Exception;
 class Lodgement extends Database {
 
     private $pdo;
-    public $id ="";
-    public $id_user ="";
-    public $title ="";
-    public $creation ="";
-    public $modification ="";
-    public $actif ="1";
-    public $peoples ="";
-    public $city ="";
-    public $price ="";
-    public $picture ="";
-    public $description ="";
+    public int $id =0;
+    public int $id_user =0;
+    public string $title ="";
+    public ?string $creation ="";
+    public ?string $modification ="";
+    public int $actif =1;
+    public int $peoples =0;
+    public string$city ="";
+    public float $price =0.0;
+    public ?string $picture ="";
+    public ?string $description ="";
     
 
     public function __construct() {
@@ -38,7 +38,7 @@ class Lodgement extends Database {
                 case 'creation' : $this->$k = ($v == "" ? NULL : $v); break;
                 case 'modification' : $this->$k = ($v == "" ? NULL : $v); break;
                 case 'picture' : $this->$k = ($v == "" ? NULL : $v); break;    
-                case 'picture' : $this->$k = ($v == "" ? NULL : $v); break;                            
+                case 'description' : $this->$k = ($v == "" ? NULL : $v); break;                            
                 default : $this->$k = $v;
             }
         }else{
@@ -46,7 +46,7 @@ class Lodgement extends Database {
         }
     }
 
-    public function _get($k, $v){
+    public function _get(string $k, $v){
         if (property_exists($this, $k)) {
             return $this->$k = $v;
         }else{
@@ -54,35 +54,24 @@ class Lodgement extends Database {
         }
     }
 
-    public function get($id){
+    public function get(int $id): void{
         if ($id != 0) {
             try{
                 $sql ='SELECT * FROM lodgements WHERE id=?';
                 $stmt = $this->pdo->prepare($sql);
-                $stmt->bindParam(1, $id, PDO::PARAM_INT);
-                $stmt->execute();
-                $this->setData($stmt->fetch(PDO::FETCH_ASSOC));
+                $stmt->execute(array($id));
+                $data =$stmt->fetch(PDO::FETCH_ASSOC);
+                if($data)
+                    $this->setData($data);
             }catch(PDOException $e){
                 throw new Exception("Erreur lors de la recupération du logement ".$id." : " . $e->getMessage());
             }
         }else{
-            return 'L\'id est incorrect !';
+            throw new Exception("L'id est incorrect !");
         }
     }
 
-    public function getBy($k, $v){
-            try{
-                $sql ="SELECT id FROM lodgements WHERE $k=?";
-                $stmt = $this->pdo->prepare($sql);
-                $stmt->bindParam(1, $v, PDO::PARAM_STR);
-                $stmt->execute();
-                return $stmt->fetch(PDO::FETCH_ASSOC);
-            }catch(PDOException $e){
-                throw new Exception("Aucun logement trouvé :" . $e->getMessage());
-            }
-    }
-
-    public function save(){
+    public function save() :void{
         if($this->id == 0){
             $this->_insert();
         } else {
@@ -107,7 +96,7 @@ class Lodgement extends Database {
         }
     }
 
-    private function _insert(){
+    private function _insert():void{
         $req= array();
         $val= array();
         $this->creation= date('Y-m-d H:i:s');
@@ -131,12 +120,31 @@ class Lodgement extends Database {
         }
     }
     
-    public function delete(){
+    public function desactivate():void{
         $this->actif = 0;
         $this->save();
     }
 
-    public function setData($data = array()){
+    public function activate():void{
+        $this->actif = 1;
+        $this->save();
+    }
+
+    public function delete():void{
+        if ($this->id != 0) {
+            try{
+                $sql ='DELETE FROM lodgements WHERE id=?';
+                $stmt = $this->pdo->prepare($sql);
+                $stmt->execute(array($this->id));
+            }catch(PDOException $e){
+                throw new Exception("Erreur lors de la suppression du logement ".$this->id." : " . $e->getMessage());
+            }
+        }else{
+            throw new Exception("Erreur lors de la suppression du logement, l'id n'est pas valide");
+        }
+    }
+
+    public function setData(array $data = array()):void{
         foreach(array_keys(get_object_vars($this)) as $a){
             if ($a != "pdo"){
                 if(isset($data[$a])){
@@ -147,7 +155,7 @@ class Lodgement extends Database {
             } 
         }
     }
-    public function getData(){
+    public function getData():array{
         $data = array();
         foreach(array_keys(get_object_vars($this)) as $a){
             if ($a != "pdo"){
@@ -157,9 +165,15 @@ class Lodgement extends Database {
         return $data;
     }
 
-    public static function getAllLodgements($pdo, $req = array()){
+    public static function getAllLodgements(PDO $pdo, array $req = array(), int $actif = 1) :array{
         $where = array();
         $val = array();
+
+        //actif
+        if(isset($actif) && $actif == 1){
+            $where[]= 'AND lodgements.actif=?';
+            $val[]=$actif;
+        }
 
         //id_user
         if(isset($req['id_user']) && $req['id_user'] !=''){
@@ -180,7 +194,7 @@ class Lodgement extends Database {
         $sql ='SELECT lodgements.*, users.lastname,users.firstname
                 FROM lodgements
                 INNER JOIN users ON lodgements.id_user = users.id
-                WHERE 1 AND lodgements.actif=1
+                WHERE 1 
                 '. implode(' ',  $where);
 
         try {

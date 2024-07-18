@@ -34,10 +34,6 @@
                 font-weight: bold;
                 white-space: nowrap;
             }
-            a:first-child{
-                width: 50%;
-                justify-content: flex-start;
-            }
         }
     }
 
@@ -82,21 +78,6 @@
         table{
             width: 80%;
             margin: 4rem auto;
-            thead{
-                display: table-header-group;
-            }
-            td::before{
-                content:"";
-            }
-            tr{
-                display: table-row;
-               
-            }
-            td{
-                display: table-cell;
-                text-align: center;
-                padding: 10px;
-            }
         }
 
         #form_search{
@@ -126,6 +107,21 @@
     }
     .resultat_logement{
         grid-template-columns: repeat(4, 1fr);
+    }
+
+    .lodgement_description{
+        grid-template-areas:
+        "grid1 grid2"
+        "grid3 grid2";
+        grid-template-columns: 1fr 1fr;
+        grid-column-gap: 2rem;
+        .grid1{
+        margin-bottom: 2rem;
+        }
+    }
+
+    .lodgement_picture{
+        width: 50%;
     }
 }
 

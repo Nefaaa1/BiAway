@@ -19,3 +19,9 @@ function get_backfooter(){
 function get_footer(){
     include   $_SERVER['DOCUMENT_ROOT'].'/app/Views/include/footer.php';
 }
+
+function envoyerEmail($to, $subject, $message,$headers) {
+    if (!mail($to, $subject, $message, $headers)) {
+        throw new Exception("Échec de l'envoi de l'email à $to");
+    }
+}
