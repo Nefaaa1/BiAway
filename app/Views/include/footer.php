@@ -27,7 +27,7 @@
         </form>
     </section>
 </footer>
-</body>
+
 <script>
     function submitContact(event){
         event.preventDefault()
@@ -75,5 +75,14 @@
             console.error("Erreur lors de la requête Fetch:", error);
         });
     }
+
+    function verticalScroll() {
+        return document.documentElement.scrollHeight > window.innerHeight;
+    }
+
+    if (!verticalScroll()) {
+        document.querySelector('.footer').classList.add('footer_noscroll');
+    } 
 </script>
+</body>
 </html>

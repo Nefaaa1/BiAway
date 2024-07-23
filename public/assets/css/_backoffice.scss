@@ -53,20 +53,29 @@
 .content_back{
 
     padding: 2rem 1rem ;
-
+    .accueil{
+        text-align: center; 
+    }
     table{
         @include liste;
     }
     form{
+        .action{
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
         fieldset{
             width: 100%;
             padding: 2rem 1rem;
+            display: flex;
+            align-items: center;
             label{
                 display: inline-block;
                 width: 33%;
             }
             input, select, textarea{
-                width: 65%;
+                width: 62%;
                 @include input;
                 box-shadow: 0px 0px 8px 0px rgba(0,0,0,0.63);
                 -webkit-box-shadow: 0px 0px 8px 0px rgba(0,0,0,0.63);
@@ -77,6 +86,32 @@
 
         fieldset+fieldset{
             border-top: 1px dotted #000;
+        }
+    }
+    .stat_back{
+        margin-top: 5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 3rem;
+        .detail_stat{
+            width: 12rem;
+            height: 12rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 2px 2px 13px -4px #5a5a5acb;
+            border-radius: $border-radius;
+            .nombre{
+                font-size: 3.5rem;
+                font-weight: bold;
+            }
+            .intitule{
+            
+            }
         }
     }
 }
@@ -138,6 +173,8 @@
     .show-menu {
         top: 0;
     }
+
+    
 }
 
 #form_search{

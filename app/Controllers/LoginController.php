@@ -10,8 +10,7 @@ class LoginController {
     }
 
     public function inscription(){
-        // header('Content-Type: application/json');
-        $obligatoire= array('lastname','firstname', 'mail', 'password');
+        $obligatoire= array('lastname','firstname', 'phone', 'mail', 'password');
         $error = array();
         foreach ($obligatoire as $o){
             if($_POST[$o] =="")
@@ -22,8 +21,13 @@ class LoginController {
             echo json_encode(['status' => 'error', 'key' => $error,  'message' => 'Informations obligatoires manquante !']);
             exit();
         }
-
-        //VERIFICATION MAIL A FAIRE
+        
+        //VERIFICATION MAIL 
+        if (!preg_match('/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/', $_POST['mail'])) {
+            http_response_code(500);
+            echo json_encode(['status' => 'error', 'message' => 'Adresse mail non valide !']);
+            exit();
+        }
         $u=new User();
         if($u->verif_mail($_POST['mail'])){
             $error['mail'] = 'Le mail est déjà pris !';
@@ -32,10 +36,16 @@ class LoginController {
             exit();
         }
 
-        //VERIFICATION PASSWORD
-        if (strlen($_POST['password']) < 8 || !preg_match('/[A-Za-z]/', $_POST['password']) || !preg_match('/[0-9]/', $_POST['password'])) {
+        //VERIFICATION TELEPGONE 
+        if (!preg_match('/^0[1-9]\d{8}$/', $_POST['phone'])) {
             http_response_code(500);
-            echo json_encode(['status' => 'error', 'message' => 'Votre mot de passe doit contenir au moins 8 caractère avec des chiffres et lettres !']);
+            echo json_encode(['status' => 'error', 'message' => 'Le numéro de téléphone n\'est pas valide !']);
+            exit();
+        }
+        //VERIFICATION PASSWORD
+        if (strlen($_POST['password']) < 12 || !preg_match('/[A-Za-z]/', $_POST['password']) || !preg_match('/[0-9]/', $_POST['password'])) {
+            http_response_code(500);
+            echo json_encode(['status' => 'error', 'message' => 'Votre mot de passe doit contenir au moins 12 caractère avec des chiffres et lettres !']);
             exit();
         }
         $_POST['password']= password_hash($_POST['password'],PASSWORD_BCRYPT);
@@ -46,8 +56,9 @@ class LoginController {
             $u->last_connexion=date('Y-m-d H:i:s');
             $u->save();
             unset($u->password);
+            $result = $u->getBy('mail',$u->mail);
             $_SESSION['user']=[
-                'id' => $u->id,
+                'id' =>  $result['id'],
                 'firstname' => $u->firstname,
                 'lastname' => $u->lastname,
                 'mail' => $u->mail,
@@ -61,7 +72,6 @@ class LoginController {
     }
 
     public function connexion(){
-        // header('Content-Type: application/json');
         $obligatoire= array('mail','password');
         $error = array();
         foreach ($obligatoire as $o){
@@ -81,6 +91,11 @@ class LoginController {
             exit();
         }
         $u->get($verif_id['id']);
+        if($u->actif == 0){
+            http_response_code(500);
+            echo json_encode(['status' => 'error', 'message' => 'Adresse e-mail ou mot de passe incorrect !']);
+            exit();
+        }
         if(password_verify($_POST['password'],$u->password)){
             $u->last_connexion=date('Y-m-d H:i:s');
             $u->save();

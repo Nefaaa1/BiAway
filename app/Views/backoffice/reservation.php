@@ -2,15 +2,18 @@
 <main class="content_back">
     <p id="reponse_form"></p>
     <form method="post" id="form_add">
-        <a class="button back" href="/backoffice/reservations"><i class="fa-solid fa-square-caret-left"></i> <span>Retour</span></a>
-        <button onclick="submitSave(event)" class="save"><i class="fa-regular fa-floppy-disk"></i> <span><?= $data['button'] ?></span></button>
-        <?php if($data['reservation']['id'] !=0){  ?>
-        <button onclick="_delete(event)" class="delete" ><i class="fa-regular fa-trash-can"></i> <span>Supprimer</span></button>
-        <?php }  ?>
+        <div class="action">
+            <a class="button back" href="/backoffice/reservations"><i class="fa-solid fa-square-caret-left"></i> <span>Retour</span></a>
+            <button onclick="submitSave(event)" class="save"><i class="fa-regular fa-floppy-disk"></i> <span><?= $data['button'] ?></span></button>
+            <?php if($data['reservation']['id'] !=0){  ?>
+            <button onclick="_delete(event)" class="delete" ><i class="fa-regular fa-trash-can"></i> <span>Supprimer</span></button>
+            <?php }  ?>
+            
+        </div>
         <h2><?= $data['h2'] ?></h2>
         <input type="hidden" name="id" value="<?= $data['reservation']['id'] ?>">
         <fieldset>
-            <label for="id_user">Propriétaire</label>
+            <label for="id_user">Locataire</label>
             <select name="id_user" id="id_user">
                 <option value=""></option>
                 <?php foreach($data['users'] as $d){?>
@@ -49,7 +52,7 @@
             input.title = '';
             input.classList.remove('error');
         });
-        
+        alert.classList.remove(...alert.classList);
         fetch('/save_reservation', 
         {
             method: "POST",
@@ -87,6 +90,7 @@
             var alert =  document.getElementById('reponse_form');
             var form = document.getElementById("form_add");
             var formData = new FormData(form);
+            alert.classList.remove(...alert.classList);
             fetch('/delete_reservation', 
             {
                 method: "POST",

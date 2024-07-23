@@ -1,10 +1,24 @@
 
 @media only screen  and (min-width: 768px) and (max-width: 1023px) {
+    button.save span, .button.save span, button.delete span,  button.switch span, .button.delete span, button.back span, .button.back span{
+        display: inline-block;
+     }
+     
     .resultat_logement{
-        grid-template-columns: repeat(3, 1fr);
+        .liste_logement{
+            grid-template-columns: repeat(3, 1fr);
+        }
     }
 
     .lodgement_picture{
         width:75%;
+    }
+
+    .lodgement_description{
+        .grid1{
+            img{
+                width: 150px;
+            }
+        }
     }
 }

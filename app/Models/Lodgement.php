@@ -15,7 +15,7 @@ class Lodgement extends Database {
     public ?string $modification ="";
     public int $actif =1;
     public int $peoples =0;
-    public string$city ="";
+    public string $city ="";
     public float $price =0.0;
     public ?string $picture ="";
     public ?string $description ="";
@@ -203,7 +203,18 @@ class Lodgement extends Database {
             return $query->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             throw new Exception("Erreur lors de la récupération des logements : " . $e->getMessage());
-            return [];
+        }
+    }
+    public static function getCount(PDO $pdo) :int{
+        $sql ='SELECT COUNT(*)
+                FROM lodgements';
+
+        try {
+            $query = $pdo->prepare($sql);
+            $query->execute();
+            return $query->fetchColumn();
+        } catch (PDOException $e) {
+            throw new Exception("Erreur lors de la récupération des logements : " . $e->getMessage());
         }
     }
 }

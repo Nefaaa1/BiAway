@@ -1,5 +1,9 @@
 <?php 
 namespace App\Controllers;
+
+use App\Models\Database;
+use App\Models\Lodgement;
+use App\Models\Reservation;
 use App\Models\User;
 
 
@@ -13,6 +17,9 @@ class BackOfficeController {
             header("Location: /backoffice"); 
             exit();
         }
+        $data['lodgements'] = Lodgement::getCount(Database::getInstance());
+        $data['users'] = User::getCount(Database::getInstance());
+        $data['reservations'] = Reservation::getCount(Database::getInstance());
         require_once $_SERVER['DOCUMENT_ROOT']. '/app/Views/backoffice/dashboard.php';
     }
 

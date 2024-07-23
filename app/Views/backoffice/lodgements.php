@@ -45,7 +45,7 @@
                                     <td data-nom='ID'>${d.id}</td>
                                     <td data-nom='Titre'>${d.title}</td>
                                     <td data-nom='Nombre de place'>${d.peoples}</td>
-                                    <td data-nom='Prix'>${d.price}</td>
+                                    <td data-nom='Prix'>${d.price} €</td>
                                     <td data-nom='Ville'>${d.city}</td>
                                 </tr>`;
                     });

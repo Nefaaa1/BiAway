@@ -45,6 +45,7 @@
         var alert =  document.getElementById('reponse_form');
         var form = document.getElementById("form_add");
         var formData = new FormData(form);
+        alert.classList.remove(...alert.classList);
         input_add.forEach(input => {
             input.title = '';
             input.classList.remove('error');
@@ -89,6 +90,7 @@
             var alert =  document.getElementById('reponse_form');
             var form = document.getElementById("form_add");
             var formData = new FormData(form);
+            alert.classList.remove(...alert.classList);
             fetch('/delete_lodgement', 
             {
                 method: "POST",

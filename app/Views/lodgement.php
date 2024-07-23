@@ -14,16 +14,11 @@
         </div>
         <div class="grid2">
             <h2>Logement de <?= htmlspecialchars($data['user']['firstname']); ?></h2>
-            <p> <?= nl2br(htmlspecialchars($data['lodgement']['description'])); ?></p>
+            <p> <?= $data['lodgement']['description'] != null ? nl2br(htmlspecialchars($data['lodgement']['description'])) : "" ?></p>
         </div>
         <div class="grid3">
             <iframe
-                width="100%"
                 height="200"
-                frameborder="0"
-                scrolling="no"
-                marginheight="0"
-                marginwidth="0"
                 src="https://www.openstreetmap.org/export/embed.html?bbox=<?= (htmlspecialchars($data['longitude'])-0.02) . ',' . (htmlspecialchars($data['latitude'])-0.02) . ',' . (htmlspecialchars($data['longitude'])+0.02) . ',' . (htmlspecialchars($data['latitude'])+0.02); ?>&layer=mapnik"
                 >
             </iframe>       

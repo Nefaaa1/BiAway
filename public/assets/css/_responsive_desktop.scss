@@ -1,7 +1,8 @@
 @media only screen and (min-width: 1024px) {
-    button.save span, .button.save span, button.delete span, .button.delete span, button.back span, .button.back span{
+    button.save span, .button.save span, button.delete span,  button.switch span, .button.delete span, button.back span, .button.back span{
         display: inline-block;
      }
+     
     .back_header{
         nav{ 
             .menu-burger{
@@ -74,7 +75,9 @@
     }
 
     .content_back{
-        
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 110rem;
         table{
             width: 80%;
             margin: 4rem auto;
@@ -86,6 +89,9 @@
                 width: 20%;
                 margin-right: 3rem;
             }
+        }
+        .stat_back{
+            flex-direction: row;
         }
     }
     .search_lodgement{
@@ -106,7 +112,9 @@
         }
     }
     .resultat_logement{
-        grid-template-columns: repeat(4, 1fr);
+        .liste_logement{
+            grid-template-columns: repeat(4, 1fr);
+        }
     }
 
     .lodgement_description{
@@ -117,6 +125,9 @@
         grid-column-gap: 2rem;
         .grid1{
         margin-bottom: 2rem;
+            img{
+                width: 100px;
+            }
         }
     }
 

@@ -2,16 +2,18 @@
 <main class="content_back">
     <p id="reponse_form"></p>
     <form method="post" id="form_add">
-        <a class="button back" href="/backoffice/logements"><i class="fa-solid fa-square-caret-left"></i> <span>Retour</span></a>
-        <button onclick="submitSave(event)" class="save"><i class="fa-regular fa-floppy-disk"></i> <span><?= $data['button'] ?></span></button>
-        <?php if($data['lodgement']['id'] !=0){  ?>
-            <button onclick="_delete(event)" class="delete" ><i class="fa-regular fa-trash-can"></i> <span>Supprimer</span></button>
-            <?php if($data['lodgement']['actif'] == 1){  ?>
-                <button onclick="_switch(event,0)" class="switch" ><i class="fa-solid fa-lock"></i></i> <span>Désactiver</span></button>
-            <?php }else{  ?>
-                <button onclick="_switch(event,1)" class="switch" ><i class="fa-solid fa-lock-open"></i></i> <span>Activer</span></button>
+        <div class="action">
+            <a class="button back" href="/backoffice/logements"><i class="fa-solid fa-square-caret-left"></i> <span>Retour</span></a>
+            <button onclick="submitSave(event)" class="save"><i class="fa-regular fa-floppy-disk"></i> <span><?= $data['button'] ?></span></button>
+            <?php if($data['lodgement']['id'] !=0){  ?>
+                <button onclick="_delete(event)" class="delete" ><i class="fa-regular fa-trash-can"></i> <span>Supprimer</span></button>
+                <?php if($data['lodgement']['actif'] == 1){  ?>
+                    <button onclick="_switch(event,0)" class="switch" ><i class="fa-solid fa-lock"></i></i> <span>Désactiver</span></button>
+                <?php }else{  ?>
+                    <button onclick="_switch(event,1)" class="switch" ><i class="fa-solid fa-lock-open"></i></i> <span>Activer</span></button>
+                <?php }  ?>
             <?php }  ?>
-        <?php }  ?>
+        </div>
         <h2><?= $data['h2'] ?></h2>
         <input type="hidden" name="id" value="<?= $data['lodgement']['id'] ?>">
         <fieldset>
@@ -51,13 +53,14 @@
     var input_add= document.querySelectorAll("#form_add input");
     function submitSave(event){
         event.preventDefault()
+        var alert =  document.getElementById('reponse_form');
         var form = document.getElementById("form_add");
         var formData = new FormData(form);
         input_add.forEach(input => {
             input.title = '';
             input.classList.remove('error');
         });
-        
+        alert.classList.remove(...alert.classList);
         fetch('/save_lodgement', 
         {
             method: "POST",
@@ -70,10 +73,14 @@
                     input.title = '';
                     input.classList.remove('error');
                 });
+                alert.classList.add('success');
+                alert.textContent=data.message;
                 setTimeout( () => {
                      window.location.href = '/backoffice/logements';
-                    }, 500);
+                    }, 1500);
             }else {
+                alert.classList.add('error');
+                alert.textContent=data.message;
                 for (const key in data.key) {
                     const value = data.key[key];
                     console.log("#form_add input[name="+ key +"]")
@@ -92,6 +99,7 @@
             var alert =  document.getElementById('reponse_form');
             var form = document.getElementById("form_add");
             var formData = new FormData(form);
+            alert.classList.remove(...alert.classList);
             fetch('/delete_lodgement', 
             {
                 method: "POST",
@@ -103,7 +111,7 @@
                     alert.classList.add('success');
                     alert.textContent=data.message;
                     setTimeout( () => {
-                        window.location.href = '/backoffice/lodgements';
+                        window.location.href = '/backoffice/logements';
                         }, 1500);
                 }else{
                     alert.classList.add('error');

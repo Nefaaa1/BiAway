@@ -238,4 +238,16 @@ class User extends Database {
             return [];
         }
     }
+    public static function getCount(PDO $pdo) :int{
+        $sql ='SELECT COUNT(*)
+                FROM users';
+
+        try {
+            $query = $pdo->prepare($sql);
+            $query->execute();
+            return $query->fetchColumn();
+        } catch (PDOException $e) {
+            throw new Exception("Erreur lors de la récupération des utilisateurs : " . $e->getMessage());
+        }
+    }
 }

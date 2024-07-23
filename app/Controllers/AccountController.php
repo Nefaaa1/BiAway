@@ -115,8 +115,11 @@ class AccountController {
                 echo json_encode(['status' => 'error', 'message' =>'Image trop lourde !']);
                 exit();
             }
+        }else{
+            http_response_code(500);
+            echo json_encode(['status' => 'error', 'message' => 'Veuillez ajouter une photo !']);
+            exit();
         }
-        //VERIFICATION DE L'ANCIEN MOT DE PASSE
         $u->setData($_POST);
         try {
             $u->save();

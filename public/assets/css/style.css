@@ -64,7 +64,7 @@ button:hover, .button:hover {
   background-color: #d82d02;
 }
 
-button.save span, .button.save span, button.delete span, .button.delete span, button.back span, .button.back span {
+button.save span, .button.save span, button.delete span, button.switch span, .button.delete span, button.back span, .button.back span {
   display: none;
 }
 
@@ -257,6 +257,14 @@ header.home-header {
   justify-content: space-between;
 }
 
+.footer_noscroll {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  translate: -50%;
+}
+
 #form_inscription {
   display: none;
 }
@@ -439,12 +447,12 @@ header.home-header {
   padding-right: 0;
 }
 
-.resultat_logement {
+.resultat_logement .liste_logement {
   display: grid;
   grid-gap: 2rem;
   grid-template-columns: repeat(2, 1fr);
 }
-.resultat_logement figure {
+.resultat_logement .liste_logement figure {
   width: 100%;
   height: 20rem;
   margin: 0;
@@ -453,13 +461,13 @@ header.home-header {
   overflow: hidden;
   cursor: pointer;
 }
-.resultat_logement figure img {
+.resultat_logement .liste_logement figure img {
   width: 100%;
   height: 100%;
   -o-object-fit: cover;
      object-fit: cover;
 }
-.resultat_logement figure figcaption {
+.resultat_logement .liste_logement figure figcaption {
   position: absolute;
   bottom: 0;
   width: 100%;
@@ -474,14 +482,14 @@ header.home-header {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   border-top: 1px solid rgba(255, 255, 255, 0.4);
 }
-.resultat_logement figure figcaption div:first-child {
+.resultat_logement .liste_logement figure figcaption div:first-child {
   flex: 1;
   overflow: hidden;
   display: flex;
   align-items: center;
   padding: 0.5rem;
 }
-.resultat_logement figure figcaption .price {
+.resultat_logement .liste_logement figure figcaption .price {
   background: rgba(0, 0, 0, 0.33);
   -webkit-backdrop-filter: blur(10px);
           backdrop-filter: blur(10px);
@@ -497,7 +505,7 @@ header.home-header {
   width: fit-content;
   align-self: flex-end;
 }
-.resultat_logement figure figcaption p {
+.resultat_logement .liste_logement figure figcaption p {
   margin-top: 0.5rem;
 }
 
@@ -538,7 +546,7 @@ header.home-header {
   align-items: center;
 }
 .lodgement_description .grid1 img {
-  width: 100px;
+  width: 200px;
   border-radius: 1rem;
   overflow: hidden;
   border: 2px solid #ff6039;
@@ -554,6 +562,9 @@ header.home-header {
 }
 .lodgement_description .grid3 {
   grid-area: grid3;
+}
+.lodgement_description .grid3 iframe {
+  width: 100%;
 }
 
 .lodgement_reservation p {
@@ -614,7 +625,9 @@ header.home-header {
   flex-wrap: wrap;
 }
 .motdepassechange label {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 2rem;
 }
 .motdepassechange input {
   border-radius: 1rem;
@@ -688,6 +701,17 @@ header.home-header {
   outline: none;
 }
 
+.changement_photo form {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.changement_photo form fieldset {
+  padding: 0;
+}
+
 #reponse_form, #reponse_contact {
   position: fixed;
   right: 0;
@@ -702,14 +726,17 @@ header.home-header {
   z-index: 2;
   opacity: 0;
   text-align: center;
+  pointer-events: none;
 }
 #reponse_form.error, #reponse_contact.error {
   background: #dd0000;
   animation: message 3s forwards;
+  pointer-events: auto;
 }
 #reponse_form.success, #reponse_contact.success {
   background: #00d100;
   animation: message 3s forwards;
+  pointer-events: auto;
 }
 
 .not_found {
@@ -727,6 +754,7 @@ header.home-header {
   0% {
     opacity: 0;
     bottom: 0;
+    pointer-events: auto;
   }
   10% {
     opacity: 1;
@@ -739,6 +767,7 @@ header.home-header {
   100% {
     opacity: 0;
     bottom: 0;
+    pointer-events: none;
   }
 }
 .back_container {
@@ -809,6 +838,9 @@ header.home-header {
 .content_back {
   padding: 2rem 1rem;
 }
+.content_back .accueil {
+  text-align: center;
+}
 .content_back table {
   border-collapse: collapse;
   width: 100%;
@@ -870,16 +902,23 @@ header.home-header {
     padding: 10px;
   }
 }
+.content_back form .action {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
 .content_back form fieldset {
   width: 100%;
   padding: 2rem 1rem;
+  display: flex;
+  align-items: center;
 }
 .content_back form fieldset label {
   display: inline-block;
   width: 33%;
 }
 .content_back form fieldset input, .content_back form fieldset select, .content_back form fieldset textarea {
-  width: 65%;
+  width: 62%;
   border-radius: 1rem;
   padding: 1rem;
   border: none;
@@ -895,7 +934,29 @@ header.home-header {
 .content_back form fieldset + fieldset {
   border-top: 1px dotted #000;
 }
-
+.content_back .stat_back {
+  margin-top: 5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 3rem;
+}
+.content_back .stat_back .detail_stat {
+  width: 12rem;
+  height: 12rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 2px 2px 13px -4px rgba(90, 90, 90, 0.7960784314);
+  border-radius: 1rem;
+}
+.content_back .stat_back .detail_stat .nombre {
+  font-size: 3.5rem;
+  font-weight: bold;
+}
 .back_header nav {
   background-color: #560000;
   width: 100%;
@@ -982,15 +1043,21 @@ header.home-header {
 }
 
 @media only screen and (min-width: 768px) and (max-width: 1023px) {
-  .resultat_logement {
+  button.save span, .button.save span, button.delete span, button.switch span, .button.delete span, button.back span, .button.back span {
+    display: inline-block;
+  }
+  .resultat_logement .liste_logement {
     grid-template-columns: repeat(3, 1fr);
   }
   .lodgement_picture {
     width: 75%;
   }
+  .lodgement_description .grid1 img {
+    width: 150px;
+  }
 }
 @media only screen and (min-width: 1024px) {
-  button.save span, .button.save span, button.delete span, .button.delete span, button.back span, .button.back span {
+  button.save span, .button.save span, button.delete span, button.switch span, .button.delete span, button.back span, .button.back span {
     display: inline-block;
   }
   .back_header nav .menu-burger {
@@ -1053,6 +1120,11 @@ header.home-header {
   .backoffice_connexion {
     width: 35rem;
   }
+  .content_back {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 110rem;
+  }
   .content_back table {
     width: 80%;
     margin: 4rem auto;
@@ -1063,6 +1135,9 @@ header.home-header {
   .content_back #form_search input, .content_back #form_search select {
     width: 20%;
     margin-right: 3rem;
+  }
+  .content_back .stat_back {
+    flex-direction: row;
   }
   .search_lodgement {
     width: 40%;
@@ -1081,7 +1156,7 @@ header.home-header {
     flex-direction: row;
     justify-content: space-evenly;
   }
-  .resultat_logement {
+  .resultat_logement .liste_logement {
     grid-template-columns: repeat(4, 1fr);
   }
   .lodgement_description {
@@ -1091,6 +1166,9 @@ header.home-header {
   }
   .lodgement_description .grid1 {
     margin-bottom: 2rem;
+  }
+  .lodgement_description .grid1 img {
+    width: 100px;
   }
   .lodgement_picture {
     width: 50%;

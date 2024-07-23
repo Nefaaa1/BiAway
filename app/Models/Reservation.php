@@ -193,4 +193,16 @@ class Reservation extends Database {
             return false;
         }
     }
+    public static function getCount(PDO $pdo) :int{
+        $sql ='SELECT COUNT(*)
+                FROM reservation';
+
+        try {
+            $query = $pdo->prepare($sql);
+            $query->execute();
+            return $query->fetchColumn();
+        } catch (PDOException $e) {
+            throw new Exception("Erreur lors de la récupération des reservations : " . $e->getMessage());
+        }
+    }
 }

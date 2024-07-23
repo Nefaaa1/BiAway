@@ -2,16 +2,18 @@
 <main class="content_back">
     <p id="reponse_form"></p>
     <form method="post" id="form_add">
-        <a class="button back" href="/backoffice/utilisateurs"><i class="fa-solid fa-square-caret-left"></i> <span>Retour</span></a>
-        <button onclick="submitSave(event)" class="save"><i class="fa-regular fa-floppy-disk"></i> <span><?= $data['button'] ?></span></button>
-        <?php if($data['user']['id'] != 0){  ?>
-            <button onclick="_delete(event)" class="delete" ><i class="fa-regular fa-trash-can"></i> <span>Supprimer</span></button>
-            <?php if($data['user']['actif'] == 1){  ?>
-                <button onclick="_switch(event,0)" class="switch" ><i class="fa-solid fa-user-lock"></i></i> <span>Désactiver</span></button>
-            <?php }else{  ?>
-                <button onclick="_switch(event,1)" class="switch" ><i class="fa-solid fa-lock-open"></i></i> <span>Activer</span></button>
+        <div class="action">
+            <a class="button back" href="/backoffice/utilisateurs"><i class="fa-solid fa-square-caret-left"></i> <span>Retour</span></a>
+            <button onclick="submitSave(event)" class="save"><i class="fa-regular fa-floppy-disk"></i> <span><?= $data['button'] ?></span></button>
+            <?php if($data['user']['id'] != 0){  ?>
+                <button onclick="_delete(event)" class="delete" ><i class="fa-regular fa-trash-can"></i> <span>Supprimer</span></button>
+                <?php if($data['user']['actif'] == 1){  ?>
+                    <button onclick="_switch(event,0)" class="switch" ><i class="fa-solid fa-user-lock"></i></i> <span>Désactiver</span></button>
+                <?php }else{  ?>
+                    <button onclick="_switch(event,1)" class="switch" ><i class="fa-solid fa-lock-open"></i></i> <span>Activer</span></button>
+                <?php }  ?>
             <?php }  ?>
-        <?php }  ?>
+        </div>
         <h2><?= $data['h2'] ?></h2>
         <input type="hidden" name="id" value="<?= $data['user']['id'] ?>">       
         <fieldset>
@@ -36,20 +38,32 @@
         </fieldset>
         <fieldset>
             <label for="mail">Téléphone</label>
-            <input type="tel" id="mail" placeholder="Mail" name="phone" value="<?= $data['user']['phone'] ?>">
-        </fieldset>        
+            <input type="tel" id="mail" placeholder="06XXXXXXXX" name="phone" value="<?= $data['user']['phone'] ?>">
+        </fieldset>    
+        <fieldset>
+            <label for="photo">Choisissez une photo :</label>
+            <input type="file" id="picture" name="picture" accept="image/*">
+        </fieldset>
+        <fieldset>
+            <label for="password">Mot de passe</label>
+            <input type="password" id="password" name="password">
+        </fieldset>
+        <?php if($data['user']['id'] != 0){ ?>
+            <small><i class="fa-solid fa-triangle-exclamation"></i> Si vous saissisez un mot de passe celui ci remplacera le mot de passe actuel ! <i class="fa-solid fa-triangle-exclamation"></i></small> 
+        <?php } ?>
     </form>
     <script>
     var input_add= document.querySelectorAll("#form_add input");
     function submitSave(event){
         event.preventDefault()
+        var alert =  document.getElementById('reponse_form');
         var form = document.getElementById("form_add");
         var formData = new FormData(form);
         input_add.forEach(input => {
             input.title = '';
             input.classList.remove('error');
         });
-        
+        alert.classList.remove(...alert.classList);
         fetch('/save_user', 
         {
             method: "POST",
@@ -62,13 +76,16 @@
                     input.title = '';
                     input.classList.remove('error');
                 });
+                alert.classList.add('success');
+                alert.textContent=data.message;
                 setTimeout( () => {
                      window.location.href = '/backoffice/utilisateurs';
-                    }, 500);
+                    }, 1500);
             }else {
+                alert.classList.add('error');
+                alert.textContent=data.message;
                 for (const key in data.key) {
                     const value = data.key[key];
-                    console.log("#form_add input[name="+ key +"]")
                     document.querySelector("#form_add input[name="+ key +"]").title = value;
                     document.querySelector("#form_add input[name="+ key +"]").classList.add('error');
                 }          
@@ -84,6 +101,7 @@
             var alert =  document.getElementById('reponse_form');
             var form = document.getElementById("form_add");
             var formData = new FormData(form);
+            alert.classList.remove(...alert.classList);
             fetch('/delete_user', 
             {
                 method: "POST",

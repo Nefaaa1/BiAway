@@ -1,16 +1,17 @@
 <?php get_homeheader(); ?>
 
 <main class="container">
-   
-    <h2>Nos logements</h2>
     <section class="resultat_logement">
+        <h2>Nos logements</h2>
+        <div class="liste_logement">
+
+        </div>
     </section>
-    
 </main>
 
 <script>
     let form_search = document.getElementById('form_logement');
-    const resultat = document.querySelector('.resultat_logement');
+    const resultat = document.querySelector('.liste_logement ');
     form_search.addEventListener('submit', function(event){
         event.preventDefault();    
         search();
@@ -40,7 +41,7 @@
                     html = '<p>Aucun résultat trouvé </p>';
                 }
                 resultat.innerHTML = html;
-                var resultats = document.querySelectorAll('.resultat_logement figure');
+                var resultats = document.querySelectorAll('.resultat_logement .liste_logement figure');
                 resultats.forEach(result => {
                     result.addEventListener('click',function(e){
                         let id= this.getAttribute('data-id');
